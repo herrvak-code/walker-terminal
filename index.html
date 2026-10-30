@@ -390,7 +390,8 @@ function cartera() {
       <tbody>${c.movimientos.map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.cartera)}</td><td><span class="estado ${TIPO[m.tipo] || 'estado--nada'}">${esc(m.tipo)}</span></td></tr>`).join('')}</tbody></table></div>`
     : '<h2>Movimientos</h2><p class="vacio" style="margin-top:0">Los movimientos se publican a partir de enero de 2027.</p>';
   return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida</h1>
-    <p class="entradilla">Solo pesos, sin importes, sobre el total de Dividendos, Quality · Growth · Value y Alpha. Precios y objetivos a ${esc(c.precios_a)}; el retorno anual esperado va del precio de ese día al objetivo.</p>
+    <p class="entradilla">Solo pesos, sin importes, sobre el total de Dividendos, Quality · Growth · Value y Alpha.</p>
+    <p class="nota-gris" style="margin-top:8px">Pesos a ${esc(c.pesos_a)}. Precios a ${esc(c.precios_a)} (último cierre o cotización); el retorno anual esperado va de ese precio al objetivo.${c.congelados ? ' Con precio del ' + esc(c.pesos_a) + ': ' + esc(c.congelados) + '.' : ''}</p>
     <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
     <div class="capas" style="margin-top:14px">${leyenda}</div>
     ${tablas}${tend}${movs}`;
