@@ -1,3 +1,393 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Walker</title>
-<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F3EEE4;color:#1B1712;font-family:Georgia,serif;text-align:center;padding:24px}h1{font-weight:300;font-size:56px;color:#2E5F73;margin:0}p{color:#4A4236}</style></head>
-<body><div><h1>Walker</h1><p>El terminal se abre muy pronto.</p></div></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Walker · Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<!--
+  WALKER · Terminal. Creado el 30/10/2026 por Claude Code para Jose.
+  Todo el contenido llega cifrado (c/*.bin) y se descifra aquí con la
+  contraseña (PBKDF2 + AES-GCM, WebCrypto). Lo genera construir_terminal.py.
+-->
+<style>
+:root{
+  --papel:#FAF7F1; --papel-2:#F3EEE4; --linea:#E2D9C8; --linea-2:#D7CDBB; --blanco:#FFFFFF;
+  --texto:#1B1712; --texto-2:#4A4236; --gris:#6E6557;
+  --pizarra:#2E5F73; --pizarra-osc:#1F4252; --pizarra-suave:#E6EEF1; --pizarra-borde:#C9D6DC;
+  --tinta:#2E4D73; --ocre:#8E6A2F; --ocre-suave:#F1E5CB;
+  --verde-f:#E3EADB; --verde-t:#3B5A2C; --ambar-f:#F1E5CB; --ambar-t:#76561F; --rojo-f:#F0DCD6; --rojo-t:#8A3A2C;
+  --serif:'Newsreader', Georgia, serif; --titular:'Fraunces', Georgia, serif; --mano:'Caveat', cursive; --sans:'Inter Tight', system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--texto);font-family:var(--serif);font-size:17px;line-height:1.55}
+a{color:var(--pizarra)} a:hover{color:var(--pizarra-osc)}
+button{font:inherit}
+[hidden]{display:none !important}
+.rotulo{font:600 11px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gris)}
+.mano{font-family:var(--mano);color:var(--tinta);line-height:1.15}
+.subrayado{background:linear-gradient(transparent 58%,rgba(214,170,92,.5) 58%,rgba(214,170,92,.5) 92%,transparent 92%)}
+h1{margin:18px 0 0;font:400 clamp(30px,3.6vw,44px)/1.06 var(--titular);letter-spacing:-.01em}
+h2{margin:40px 0 10px;font:400 24px/1.2 var(--titular);border-bottom:1.5px solid var(--texto);padding-bottom:8px}
+.entradilla{margin:10px 0 0;font-size:18px;color:var(--texto-2);max-width:720px}
+.boton{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:6px;border:0;background:var(--pizarra);color:#fff;text-decoration:none;font:600 14px var(--sans);cursor:pointer}
+.boton:hover{background:var(--pizarra-osc);color:#fff}
+.boton--suave{background:var(--pizarra-suave);color:var(--pizarra-osc);border:1px solid var(--pizarra-borde)}
+.boton--suave:hover{background:#D9E5EA;color:var(--pizarra-osc)}
+.boton--peq{min-height:36px;padding:0 12px;font-size:12px}
+:focus-visible{outline:2px solid var(--ocre);outline-offset:2px}
+
+/* ---------- Entrada ---------- */
+#entrada{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--papel-2)}
+#entrada form{width:100%;max-width:400px}
+#entrada .marca{font:300 64px/1 var(--titular);color:var(--pizarra)}
+#entrada label{display:block;margin-top:34px;font:600 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gris)}
+#entrada input[type=password]{width:100%;margin-top:8px;min-height:48px;padding:0 14px;border:1px solid var(--linea-2);border-radius:6px;background:#fff;font:16px var(--sans)}
+#entrada .recordar{display:flex;align-items:center;gap:8px;margin-top:12px;font:14px var(--sans);color:var(--texto-2);letter-spacing:0;text-transform:none}
+#entrada .boton{margin-top:20px;width:100%;justify-content:center}
+#error{min-height:24px;margin-top:12px;font:14px var(--sans);color:var(--rojo-t)}
+
+/* ---------- Marco ---------- */
+.marco{min-height:100vh;display:flex;flex-wrap:wrap}
+nav.lateral{flex:1 1 240px;max-width:280px;padding:32px 22px;background:var(--papel-2);border-right:1px solid var(--linea);display:flex;flex-direction:column;gap:22px}
+nav .marca{font:300 40px/1 var(--titular);color:var(--pizarra)}
+nav .lema{margin-top:8px;font:600 10px/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gris)}
+nav .grupo{font:600 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gris);padding:16px 12px 6px}
+nav a.item{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:8px 12px;border-radius:6px;text-decoration:none;color:var(--texto)}
+nav a.item span{font:400 18px var(--titular)}
+nav a.item small{font:12px var(--sans);color:var(--gris)}
+nav a.item:hover{background:#EDE6D8}
+nav a.item[aria-current=page]{background:var(--pizarra-suave);color:var(--pizarra-osc)}
+nav .pie{margin-top:auto;border-top:1px solid var(--linea-2);padding-top:16px}
+nav .pie p{margin:0}
+nav .salir{margin-top:12px;background:none;border:0;padding:0;font:12px var(--sans);color:var(--gris);text-decoration:underline;cursor:pointer;min-height:32px}
+main{flex:999 1 560px;min-width:0;padding:40px clamp(18px,4vw,64px) 64px}
+.ancho{max-width:1060px;margin:0 auto}
+@media (max-width:720px){
+  nav.lateral{max-width:none;border-right:0;border-bottom:1px solid var(--linea);padding:20px 16px;gap:10px}
+  nav .menu{display:flex;flex-wrap:wrap;gap:4px} nav .grupo{display:none} nav .pie{display:none}
+  nav a.item{min-height:40px;padding:6px 10px} nav a.item small{display:none}
+}
+
+/* ---------- Visión ---------- */
+.cabecera{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.capas{margin-top:30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.capa{background:var(--blanco);border:1px solid var(--linea);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.capa .motivo{font-size:14px;line-height:1.4;color:var(--texto-2)}
+.estado{align-self:flex-start;padding:3px 10px;border-radius:99px;font:600 13px var(--sans)}
+.estado--verde{background:var(--verde-f);color:var(--verde-t)} .estado--ambar{background:var(--ambar-f);color:var(--ambar-t)} .estado--rojo{background:var(--rojo-f);color:var(--rojo-t)} .estado--nada{background:#EEE9E0;color:var(--gris)}
+.dos{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:start}
+.dos h2{margin-top:0}
+.caja{background:var(--papel-2);border-top:1.5px solid var(--texto);padding:18px 20px 20px}
+.caja p{margin:8px 0 0;font-size:16px}
+.lista-semanas a{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:48px;border-bottom:1px solid var(--linea);text-decoration:none;color:var(--texto)}
+.lista-semanas a span:last-child{font:12px var(--sans);color:var(--pizarra)}
+.lista-semanas{border-top:1px solid var(--linea)}
+
+/* ---------- Tarjetas ---------- */
+.pastillas{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
+.pastillas a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:99px;border:1px solid var(--pizarra-borde);background:#fff;color:var(--pizarra-osc);text-decoration:none;font:600 13px var(--sans)}
+.pastillas a[aria-current=page]{background:var(--pizarra);border-color:var(--pizarra);color:#fff}
+.rejilla{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+.tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.tarjeta .foto{padding:14px 14px 0;background:var(--papel-2)}
+.pegada{display:block;width:100%;height:150px;object-fit:cover;border:5px solid #fff;background:#E9E2D4;box-shadow:0 3px 8px rgba(0,0,0,.15);transform:rotate(-1deg)}
+.tarjeta:nth-child(even) .pegada{transform:rotate(1deg)}
+.tarjeta .pie-foto{margin:8px 0 10px;font-size:17px}
+.tarjeta .cuerpo{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.tarjeta h3{margin:0;font:400 20px var(--titular);display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tarjeta h3 small,.ticker{font:600 11px var(--sans);color:var(--gris)}
+.tarjeta .desc{margin:0;font-size:15px;line-height:1.4;color:var(--texto-2)}
+.titular-tesis{margin:4px 0 0;font:italic 400 16px/1.3 var(--titular);color:var(--pizarra)}
+.tarjeta .acciones{margin-top:auto;padding-top:12px;border-top:1px solid #EFE8DB;display:flex;flex-direction:column;gap:10px}
+.tarjeta .ultimo{font:12px/1.4 var(--sans);color:var(--texto-2)} .tarjeta .ultimo b{color:var(--gris);font-weight:600}
+.botones{display:flex;flex-wrap:wrap;gap:8px}
+.etiqueta{align-self:flex-start;display:inline-block;padding:2px 8px;border-radius:99px;background:var(--ocre-suave);color:var(--ambar-t);font:600 11px var(--sans)}
+.tambien{margin-top:30px;border-top:1px solid var(--linea);padding-top:14px;font-size:15px;color:var(--texto-2)}
+
+/* ---------- Empresa ---------- */
+.volver{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 13px var(--sans);text-decoration:none}
+.ficha{margin-top:14px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.ficha .foto{flex:0 0 auto;width:280px;max-width:100%}
+.ficha .pegada{height:190px;border-width:6px;transform:rotate(-1.5deg)}
+.ficha .credito{margin-top:8px;font:10px/1.4 var(--sans);color:var(--gris)}
+.ficha .texto{flex:1 1 320px;min-width:0}
+.trimestre{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:14px 0;border-bottom:1px solid var(--linea)}
+.trimestre .periodo{flex:0 0 150px;font:400 20px var(--titular)}
+.trimestre .botones{flex:1 1 300px}
+.nota-gris{font:12px var(--sans);color:var(--gris)}
+
+/* ---------- Cartera, método, recursos ---------- */
+.tabla-caja{overflow-x:auto}
+table{width:100%;min-width:600px;border-collapse:collapse;font:13px var(--sans)}
+th{text-align:left;padding:12px 8px 8px;font:600 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+td{padding:12px 8px;border-top:1px solid var(--linea)}
+.prosa{max-width:760px} .prosa h2{margin-top:36px} .prosa p,.prosa li{font-size:17px}
+.prosa blockquote{margin:24px 0;font:italic 300 clamp(24px,2.6vw,32px)/1.25 var(--titular);color:var(--pizarra)}
+.aviso-legal{margin-top:56px;padding-top:16px;border-top:1px solid var(--linea);font:12px/1.5 var(--sans);color:var(--gris);max-width:760px}
+.vacio{margin-top:26px;font-size:17px;color:var(--texto-2)}
+</style>
+</head>
+<body>
+
+<div id="entrada">
+  <form id="formulario" autocomplete="off">
+    <div class="marca">Walker</div>
+    <div class="rotulo" style="margin-top:10px">Investigar, decidir y acumular criterio</div>
+    <label for="clave">Contraseña de suscriptor</label>
+    <input id="clave" name="clave" type="password" required autocomplete="current-password">
+    <label class="recordar"><input id="recordar" type="checkbox" checked> Recordar en este dispositivo</label>
+    <button class="boton" type="submit" id="entrar">Entrar</button>
+    <div id="error" role="alert"></div>
+  </form>
+</div>
+
+<div id="app" class="marco" hidden>
+  <nav class="lateral" aria-label="Secciones del terminal">
+    <div>
+      <div class="marca">Walker</div>
+      <div class="lema">Investigar, decidir y acumular criterio</div>
+    </div>
+    <div class="menu" id="menu"></div>
+    <div class="pie">
+      <p class="mano" style="font-size:19px">«¿Es esta una buena inversión a este precio, en este momento y frente a las alternativas?»</p>
+      <button class="salir" type="button" id="salir">Salir y olvidar este dispositivo</button>
+    </div>
+  </nav>
+  <main><div class="ancho" id="contenido"></div></main>
+</div>
+
+<script>
+'use strict';
+const ALMACEN = 'walker-llave-v1';
+let llave = null, datos = null;
+const urls = {};
+
+// ---------- cifrado ----------
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const a64 = b => btoa(String.fromCharCode(...new Uint8Array(b)));
+
+async function derivar(clave) {
+  const cfg = await (await fetch('clave.json', { cache: 'no-store' })).json();
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(clave), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(cfg.sal), iterations: cfg.iteraciones, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, true, ['decrypt']);
+}
+async function descifrar(buf) {
+  const b = new Uint8Array(buf);
+  return crypto.subtle.decrypt({ name: 'AES-GCM', iv: b.slice(0, 12) }, llave, b.slice(12));
+}
+async function cargarDatos() {
+  const r = await fetch('c/datos.bin', { cache: 'no-store' });
+  if (!r.ok) throw new Error('sin datos');
+  datos = JSON.parse(new TextDecoder().decode(await descifrar(await r.arrayBuffer())));
+}
+async function urlDe(id, tipo) {
+  if (!urls[id]) {
+    const r = await fetch('c/' + id + '.bin');
+    urls[id] = URL.createObjectURL(new Blob([await descifrar(await r.arrayBuffer())], { type: tipo }));
+  }
+  return urls[id];
+}
+async function abrirPdf(id) {
+  const ventana = window.open('', '_blank');
+  if (ventana) ventana.document.write('<p style="font-family:sans-serif;padding:2em">Abriendo el documento…</p>');
+  const url = await urlDe(id, 'application/pdf');
+  if (ventana) ventana.location.href = url; else location.href = url;
+}
+
+// ---------- entrada ----------
+document.getElementById('formulario').addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const boton = document.getElementById('entrar'), error = document.getElementById('error');
+  boton.disabled = true; boton.textContent = 'Comprobando…'; error.textContent = '';
+  try {
+    llave = await derivar(document.getElementById('clave').value);
+    await cargarDatos();
+    if (document.getElementById('recordar').checked) {
+      try { localStorage.setItem(ALMACEN, a64(await crypto.subtle.exportKey('raw', llave))); } catch (e) {}
+    }
+    arrancar();
+  } catch (e) {
+    llave = null; error.textContent = 'Contraseña incorrecta. Está en el último post para suscriptores.';
+  } finally { boton.disabled = false; boton.textContent = 'Entrar'; }
+});
+document.getElementById('salir').addEventListener('click', () => {
+  try { localStorage.removeItem(ALMACEN); } catch (e) {}
+  location.hash = ''; location.reload();
+});
+(async () => {
+  let guardada = null;
+  try { guardada = localStorage.getItem(ALMACEN); } catch (e) {}
+  if (!guardada) return;
+  try {
+    llave = await crypto.subtle.importKey('raw', b64(guardada), { name: 'AES-GCM' }, true, ['decrypt']);
+    await cargarDatos(); arrancar();
+  } catch (e) { llave = null; try { localStorage.removeItem(ALMACEN); } catch (_) {} }
+})();
+
+function arrancar() {
+  document.getElementById('entrada').hidden = true;
+  document.getElementById('app').hidden = false;
+  window.addEventListener('hashchange', pintar);
+  pintar();
+}
+
+// ---------- utilidades ----------
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const SEM = { 'verde': 'verde', 'ámbar': 'ambar', 'ambar': 'ambar', 'rojo': 'rojo' };
+const claseEstado = e => 'estado--' + (SEM[String(e || '').toLowerCase()] || 'nada');
+function todas() {
+  const lista = [];
+  datos.estrategias.forEach(e => e.empresas.forEach(x => lista.push({ x, origen: e.titulo, ruta: '#/estrategias/' + e.id })));
+  datos.watchlist.forEach(x => lista.push({ x, origen: 'Watchlist', ruta: '#/watchlist' }));
+  return lista;
+}
+function ndocs(x) { return x.tesis.length + x.trimestres.reduce((n, t) => n + t.docs.length, 0); }
+function ultimo(x) {
+  const t = x.trimestres[0];
+  if (!t) return 'sin seguimientos todavía';
+  return t.periodo + ' · ' + t.docs.map(d => d.tipo.toLowerCase()).join(' y ');
+}
+function boton(f, texto, clase) {
+  return `<button type="button" class="boton ${clase || ''}" data-pdf="${esc(f)}">${esc(texto)}</button>`;
+}
+function foto(x) {
+  if (!x.foto) return '';
+  return `<img class="pegada" data-img="${esc(x.foto)}" alt="${esc(x.pie_foto || x.nombre)}">`;
+}
+
+// ---------- secciones ----------
+const MENU = [
+  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca']]],
+  ['Mi cartera', [['cartera', 'Cartera', 'Pesos y movimientos']]],
+  ['Recursos', [['metodo', 'Método', 'Cómo trabajo'], ['recursos', 'Lecturas', 'Lo que merece la pena leer']]]
+];
+
+function pintar() {
+  const partes = location.hash.replace(/^#\/?/, '').split('/');
+  const seccion = partes[0] || 'vision';
+  // En la página de una empresa se marca la pestaña de la que viene.
+  let marcada = seccion;
+  if (seccion === 'empresa') {
+    const r = todas().find(o => o.x.id === partes[1]);
+    marcada = r && r.origen === 'Watchlist' ? 'watchlist' : 'estrategias';
+  }
+  document.getElementById('menu').innerHTML = MENU.map(([g, items]) =>
+    `<div class="grupo">${esc(g)}</div>` + items.map(([id, t, s]) => {
+      const activa = id === marcada;
+      return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
+    }).join('')).join('');
+  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos };
+  document.getElementById('contenido').innerHTML = (vistas[seccion] || vision)(partes[1]) + avisoLegal();
+  window.scrollTo(0, 0);
+  document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', () => abrirPdf(b.dataset.pdf)));
+  document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, 'image/jpeg'); });
+}
+
+function avisoLegal() {
+  return '<p class="aviso-legal">Contenido con fines exclusivamente informativos y de análisis personal. No es asesoramiento financiero ni una recomendación personalizada de compra o venta. Invertir conlleva riesgo de pérdida del capital.</p>';
+}
+
+function vision(fecha) {
+  const v = (fecha && datos.vision.find(x => x.fecha === fecha)) || datos.vision[0];
+  if (!v) return '<div class="rotulo">Visión</div><h1>La primera lectura llega pronto</h1>';
+  const capas = (v.capas || []).map(c => `<div class="capa"><span class="rotulo" style="font-size:10px">${esc(c.capa)}</span><span class="estado ${claseEstado(c.estado)}">${esc(c.estado || 'Sin asignar')}</span><span class="motivo">${esc(c.motivo)}</span></div>`).join('');
+  const e = v.entorno;
+  const entorno = e ? `<div class="caja"><div class="rotulo" style="color:var(--pizarra)">Qué entorno es este</div>
+      ${e.favorece ? `<p><strong>Favorece</strong> ${esc(e.favorece)}</p>` : ''}
+      ${e.penaliza ? `<p><strong>Penaliza</strong> ${esc(e.penaliza)}</p>` : ''}
+      ${e.cambiaria ? `<p><strong>Cambiaría si</strong> ${esc(e.cambiaria)}</p>` : ''}</div>` : '';
+  const pdf = v.pdf ? `<div style="margin-top:22px">${boton(v.pdf, 'Descargar el informe completo (PDF)')}</div>` : '<p class="nota-gris" style="margin-top:18px">El informe completo en PDF se publica desde la próxima edición.</p>';
+  const otras = datos.vision.filter(x => x !== v);
+  const archivo = otras.length ? `<h2>Semanas anteriores</h2><div class="lista-semanas">${otras.map(x => `<a href="#/vision/${esc(x.fecha)}"><span>${esc(x.semana || '')} · ${esc(x.fecha.split('-').reverse().join('/'))} · ${esc(x.titular)}</span><span>${x.pdf ? 'Informe (PDF)' : 'Resumen'}</span></a>`).join('')}</div>` : '';
+  return `<div class="cabecera rotulo"><span>Visión · lectura macro semanal</span><span>${esc(v.semana || '')} · corte al ${esc(v.fecha.split('-').reverse().join('/'))}</span></div>
+    <h1>${esc(v.titular)}</h1>
+    ${v.frase ? `<p class="mano" style="margin:14px 0 0;font-size:24px">${esc(v.frase)}</p>` : ''}
+    <div class="capas">${capas}</div>
+    <div class="dos"><div><h2>La lectura</h2><p style="margin:0">${esc(v.lectura)}</p>${pdf}</div>${entorno}</div>
+    ${archivo}`;
+}
+
+function tarjeta(x, conEtiqueta) {
+  return `<article class="tarjeta">
+    ${x.foto ? `<div class="foto">${foto(x)}<p class="pie-foto mano">${esc(x.pie_foto)}</p></div>` : ''}
+    <div class="cuerpo">
+      ${conEtiqueta ? `<span class="etiqueta">${esc(x.etiqueta)}</span>` : ''}
+      <h3>${esc(x.nombre)} <small>${esc(x.ticker)}</small></h3>
+      <p class="desc">${esc(x.descripcion)}</p>
+      ${x.titular ? `<p class="titular-tesis">«${esc(x.titular)}»</p>` : ''}
+      <div class="acciones">
+        <div class="ultimo"><b>Último trimestre · </b>${esc(ultimo(x))}</div>
+        <div class="botones">${boton(x.tesis[0].f, 'Tesis · ' + x.tesis[0].fecha, 'boton--peq')}
+          <a class="boton boton--suave boton--peq" href="#/empresa/${esc(x.id)}">Todos los documentos (${ndocs(x)})</a></div>
+      </div>
+    </div></article>`;
+}
+
+function estrategias(id) {
+  const e = datos.estrategias.find(x => x.id === id) || datos.estrategias[0];
+  const pastillas = datos.estrategias.map(x => `<a href="#/estrategias/${x.id}"${x === e ? ' aria-current="page"' : ''}>${esc(x.titulo)}</a>`).join('');
+  const rejilla = e.empresas.length ? `<div class="rejilla">${e.empresas.map(x => tarjeta(x, false)).join('')}</div>`
+    : '<p class="vacio">Todavía no hay ninguna tesis publicada en esta estrategia.</p>';
+  return `<div class="rotulo">Estrategias · empresas en cartera</div><h1>${esc(e.titulo)}</h1><p class="entradilla">${esc(e.vara)}</p>
+    <div class="pastillas" role="navigation" aria-label="Estrategia">${pastillas}</div>${rejilla}
+    ${e.tambien ? `<p class="tambien"><span class="rotulo" style="font-size:10px">También en cartera, con su tesis en camino · </span>${esc(e.tambien)}</p>` : ''}`;
+}
+
+function watchlist() {
+  const rejilla = datos.watchlist.length ? `<div class="rejilla">${datos.watchlist.map(x => tarjeta(x, true)).join('')}</div>`
+    : '<p class="vacio">Todavía no hay ninguna tesis publicada en la watchlist.</p>';
+  return `<div class="rotulo">Watchlist · empresas que sigo sin tenerlas</div><h1>Lo que espera su precio</h1>
+    <p class="entradilla">Cada empresa lleva la etiqueta de la cartera en la que entraría.</p>${rejilla}
+    ${datos.watchlist_tambien ? `<p class="tambien"><span class="rotulo" style="font-size:10px">También en seguimiento · </span>${esc(datos.watchlist_tambien)}</p>` : ''}`;
+}
+
+function empresa(id) {
+  const r = todas().find(o => o.x.id === id);
+  if (!r) return '<h1>No encuentro esa empresa</h1>';
+  const x = r.x;
+  const trimestres = x.trimestres.length ? x.trimestres.map(t => `<div class="trimestre"><div class="periodo">${esc(t.periodo)}</div>
+      <div class="botones">${t.docs.map(d => boton(d.f, d.tipo + (d.fecha ? ' · ' + d.fecha : ''), 'boton--suave')).join('')}</div></div>`).join('')
+    : '<p class="vacio">La primera ficha previa saldrá unos días antes de los próximos resultados.</p>';
+  const anteriores = x.tesis.slice(1);
+  return `<a class="volver" href="${r.ruta}">← Volver a ${esc(r.origen)}</a>
+    <div class="ficha">
+      ${x.foto ? `<div class="foto">${foto(x)}<p class="mano" style="margin:10px 0 0;font-size:18px">${esc(x.pie_foto)}</p><p class="credito">${esc(x.credito)}</p></div>` : ''}
+      <div class="texto"><span class="etiqueta">${esc(x.etiqueta)}</span>
+        <h1 style="margin-top:10px">${esc(x.nombre)} <span class="ticker" style="font-size:14px">${esc(x.ticker)}</span></h1>
+        <p class="entradilla" style="margin-top:6px">${esc(x.descripcion)}</p>
+        ${x.titular ? `<p class="titular-tesis" style="font-size:21px;margin-top:12px">«${esc(x.titular)}»${x.subtitular ? ' ' + esc(x.subtitular) : ''}</p>` : ''}
+        <div style="margin-top:18px">${boton(x.tesis[0].f, 'Tesis vigente · ' + x.tesis[0].fecha + ' (PDF)')}</div></div>
+    </div>
+    <h2>Trimestre a trimestre</h2>
+    <p class="nota-gris" style="margin:0 0 4px">El más reciente arriba. La ficha previa fija antes del dato qué confirma la tesis y qué la pone en alerta; el seguimiento lo contrasta.</p>
+    ${trimestres}
+    ${anteriores.length ? `<h2>Tesis anteriores</h2><div class="botones">${anteriores.map(t => boton(t.f, 'Tesis · ' + t.fecha, 'boton--suave')).join('')}</div>` : ''}`;
+}
+
+function cartera() {
+  const c = datos.cartera;
+  if (!c) return '<div class="rotulo">Cartera · pesos y movimientos</div><h1>En preparación</h1><p class="entradilla">Aquí irán los pesos por estrategia y por empresa, y los movimientos con su porqué. Sin importes, número de acciones ni precio medio.</p>';
+  const pesos = (c.pesos || []).map(p => `<div class="capa"><span class="rotulo" style="font-size:10px">${esc(p.estrategia)}</span><span style="font:300 30px var(--titular)">${esc(p.peso)}</span></div>`).join('');
+  const movs = (c.movimientos || []).map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.estrategia)}</td><td><span class="estado ${m.operacion === 'Venta' ? 'estado--rojo' : 'estado--verde'}">${esc(m.operacion)}</span></td><td>${esc(m.antes)} → ${esc(m.despues)}</td><td>${esc(m.motivo)}</td></tr>`).join('');
+  return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida y qué he hecho</h1>
+    <p class="entradilla">Solo pesos. ${c.actualizado ? 'Actualizada el ' + esc(c.actualizado) + '.' : ''}</p>
+    <div class="capas">${pesos}</div>
+    <h2>Movimientos</h2><div class="tabla-caja"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Estrategia</th><th>Operación</th><th>Peso antes → después</th><th>Por qué</th></tr></thead><tbody>${movs}</tbody></table></div>`;
+}
+
+function metodo() {
+  return `<div class="rotulo">Método</div><div class="prosa">${datos.metodo || '<h1>En preparación</h1>'}</div>`;
+}
+
+function recursos() {
+  if (!datos.lecturas.length) return '<div class="rotulo">Lecturas</div><h1>Lecturas de la semana</h1><p class="entradilla">Una selección semanal de lo que merece la pena leer, con una línea de por qué. Empieza pronto.</p>';
+  return `<div class="rotulo">Lecturas</div><h1>Lecturas de la semana</h1>${datos.lecturas.map(l => `<div class="prosa"><h2>${esc(l.fecha)}</h2>${l.html}</div>`).join('')}`;
+}
+</script>
+</body>
+</html>
