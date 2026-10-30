@@ -165,7 +165,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '9333dc3ec8a5';
+const VERSION_WEB = '74a7c29e3dc2';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -173,7 +173,7 @@ fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).t
 }).catch(() => {});
 
 const ALMACEN = 'walker-llave-v1';
-let llave = null, datos = null;
+let llave = null, llaveB64 = '', datos = null;
 const urls = {};
 
 // ---------- cifrado ----------
@@ -202,11 +202,34 @@ async function urlDe(id, tipo) {
   }
   return urls[id];
 }
-async function abrirPdf(id) {
+// El PDF lo descarga y descifra la propia pestaña nueva, que es la que está
+// en primer plano: en el móvil, Safari congela la pestaña del terminal en
+// cuanto se abre la otra, y si el trabajo se hiciera aquí no terminaría
+// hasta volver a ella (el fallo de «al primer clic no abre»).
+function abrirPdf(id) {
   const ventana = window.open('', '_blank');
-  if (ventana) ventana.document.write('<p style="font-family:sans-serif;padding:2em">Abriendo el documento…</p>');
-  const url = await urlDe(id, 'application/pdf');
-  if (ventana) ventana.location.href = url; else location.href = url;
+  if (!ventana) { urlDe(id, 'application/pdf').then(u => { location.href = u; }); return; }
+  const dato = JSON.stringify({ k: llaveB64, u: new URL('c/' + id + '.bin', location.href).href });
+  ventana.document.write(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Walker · documento</title><body style="font:16px/1.5 system-ui,sans-serif;padding:2em;color:#1B1712;background:#FAF7F1">
+<p id="m">Abriendo el documento…</p><script>
+(async () => {
+  const m = document.getElementById('m'), d = ${dato.replace(/</g, '\\u003c')};
+  try {
+    const k = await crypto.subtle.importKey('raw', Uint8Array.from(atob(d.k), c => c.charCodeAt(0)), { name: 'AES-GCM' }, false, ['decrypt']);
+    const r = await fetch(d.u);
+    if (!r.ok) throw new Error(r.status);
+    const b = new Uint8Array(await r.arrayBuffer());
+    const url = URL.createObjectURL(new Blob([await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b.slice(0, 12) }, k, b.slice(12))], { type: 'application/pdf' }));
+    // Si el navegador no se deja llevar al PDF, queda un enlace para tocar.
+    setTimeout(() => { m.innerHTML = '<a href="' + url + '" style="color:#2E5F73">Abrir el documento</a>'; }, 2500);
+    location.replace(url);
+  } catch (e) {
+    m.textContent = 'No se ha podido abrir el documento. Cierra esta pestaña y vuelve a intentarlo; si sigue sin abrir, sal del terminal y vuelve a entrar.';
+  }
+})();
+<\/script>`);
+  ventana.document.close();
 }
 
 // ---------- entrada ----------
@@ -217,8 +240,9 @@ document.getElementById('formulario').addEventListener('submit', async ev => {
   try {
     llave = await derivar(document.getElementById('clave').value);
     await cargarDatos();
+    llaveB64 = a64(await crypto.subtle.exportKey('raw', llave));
     if (document.getElementById('recordar').checked) {
-      try { localStorage.setItem(ALMACEN, a64(await crypto.subtle.exportKey('raw', llave))); } catch (e) {}
+      try { localStorage.setItem(ALMACEN, llaveB64); } catch (e) {}
     }
     arrancar();
   } catch (e) {
@@ -235,7 +259,7 @@ document.getElementById('salir').addEventListener('click', () => {
   if (!guardada) return;
   try {
     llave = await crypto.subtle.importKey('raw', b64(guardada), { name: 'AES-GCM' }, true, ['decrypt']);
-    await cargarDatos(); arrancar();
+    await cargarDatos(); llaveB64 = guardada; arrancar();
   } catch (e) { llave = null; try { localStorage.removeItem(ALMACEN); } catch (_) {} }
 })();
 
@@ -402,7 +426,7 @@ function cartera() {
     : '<h2>Movimientos</h2><p class="vacio" style="margin-top:0">Los movimientos se publican a partir de enero de 2027.</p>';
   return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida</h1>
     <p class="entradilla">Solo pesos, sin importes, sobre el total de Dividendos, Quality · Growth · Value y Alpha.</p>
-    <p class="nota-gris" style="margin-top:8px">Pesos a ${esc(c.pesos_a)}. Precios a ${esc(c.precios_a)} (último cierre o cotización); el retorno anual esperado va de ese precio al objetivo.${c.congelados ? ' Con precio del ' + esc(c.pesos_a) + ': ' + esc(c.congelados) + '.' : ''}</p>
+    <p class="nota-gris" style="margin-top:8px">Posiciones a ${esc(c.posiciones_a)}. Pesos y precios a ${esc(c.precios_a)} (último cierre o cotización); el retorno anual esperado va de ese precio al objetivo.${c.congelados ? ' Con precio del ' + esc(c.posiciones_a) + ': ' + esc(c.congelados) + '.' : ''}${c.cambios_congelados ? ' Con tipo de cambio del ' + esc(c.posiciones_a) + ': ' + esc(c.cambios_congelados) + '.' : ''}</p>
     <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
     <div class="capas" style="margin-top:14px">${leyenda}</div>
     ${tablas}${movs}`;
