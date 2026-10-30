@@ -282,7 +282,10 @@ function pintar() {
       return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
     }).join('')).join('');
   const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos };
-  document.getElementById('contenido').innerHTML = (vistas[seccion] || vision)(partes[1]) + avisoLegal();
+  let html;
+  try { html = (vistas[seccion] || vision)(partes[1]); }
+  catch (e) { console.error(e); html = '<h1>Esta sección no se ha podido mostrar</h1><p class="entradilla">Es un fallo del terminal, no de tu conexión. Vuelve a intentarlo más tarde.</p>'; }
+  document.getElementById('contenido').innerHTML = html + avisoLegal();
   window.scrollTo(0, 0);
   document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', () => abrirPdf(b.dataset.pdf)));
   document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, 'image/jpeg'); });
@@ -384,8 +387,6 @@ function cartera() {
       <tbody>${e.empresas.map(x => `<tr><td style="font:15px var(--serif)">${esc(x.empresa)}</td><td>${esc(x.sector)}</td><td>${esc(x.mercado)}</td>
         <td style="text-align:right"><span style="display:inline-flex;align-items:center;gap:8px"><span style="display:inline-block;width:${Math.round((x.peso || 0) * 80)}px;height:6px;border-radius:3px;background:var(--pizarra)"></span>${pct(x.peso)}</span></td>
         <td style="text-align:right">${pct(x.peso_total)}</td><td style="text-align:right">${precio(x.precio)}</td><td style="text-align:right">${precio(x.objetivo)}</td><td style="text-align:right">${pct(x.retorno)}</td></tr>`).join('')}</tbody></table></div>`).join('');
-  const tend = c.tendencial.length ? `<h2>Tendencial</h2><div class="tabla-caja"><table><thead><tr><th>Activo</th><th>Categoría</th><th>Ticker / ISIN</th><th style="text-align:right">% objetivo</th><th style="text-align:right">% real</th></tr></thead>
-      <tbody>${c.tendencial.map(t => `<tr><td style="font:15px var(--serif)">${esc(t.activo)}</td><td>${esc(t.categoria)}</td><td>${esc(t.ticker)}</td><td style="text-align:right">${pct(t.objetivo)}</td><td style="text-align:right">${pct(t.real)}</td></tr>`).join('')}</tbody></table></div>` : '';
   const movs = c.movimientos.length ? `<h2>Movimientos</h2><div class="tabla-caja"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Cartera</th><th>Tipo</th></tr></thead>
       <tbody>${c.movimientos.map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.cartera)}</td><td><span class="estado ${TIPO[m.tipo] || 'estado--nada'}">${esc(m.tipo)}</span></td></tr>`).join('')}</tbody></table></div>`
     : '<h2>Movimientos</h2><p class="vacio" style="margin-top:0">Los movimientos se publican a partir de enero de 2027.</p>';
@@ -394,7 +395,7 @@ function cartera() {
     <p class="nota-gris" style="margin-top:8px">Pesos a ${esc(c.pesos_a)}. Precios a ${esc(c.precios_a)} (último cierre o cotización); el retorno anual esperado va de ese precio al objetivo.${c.congelados ? ' Con precio del ' + esc(c.pesos_a) + ': ' + esc(c.congelados) + '.' : ''}</p>
     <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
     <div class="capas" style="margin-top:14px">${leyenda}</div>
-    ${tablas}${tend}${movs}`;
+    ${tablas}${movs}`;
 }
 
 function metodo() {
