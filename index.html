@@ -369,15 +369,30 @@ function empresa(id) {
     ${anteriores.length ? `<h2>Tesis anteriores</h2><div class="botones">${anteriores.map(t => boton(t.f, 'Tesis · ' + t.fecha, 'boton--suave')).join('')}</div>` : ''}`;
 }
 
+const pct = (v, d = 1) => (v === null || v === undefined || v === '') ? '—' : (v * 100).toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }) + ' %';
+const precio = v => (v === null || v === undefined || v === '') ? '—' : Number(v).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const COLOR_ESTR = ['#2E5F73', '#8E6A2F', '#2E4D73', '#A89B84'];
+const TIPO = { 'Cierre': 'estado--rojo', 'Cierre excision': 'estado--rojo', 'Reducción': 'estado--ambar', 'Compra': 'estado--verde', 'Ampliación': 'estado--verde' };
+
 function cartera() {
   const c = datos.cartera;
-  if (!c) return '<div class="rotulo">Cartera · pesos y movimientos</div><h1>En preparación</h1><p class="entradilla">Aquí irán los pesos por estrategia y por empresa, y los movimientos con su porqué. Sin importes, número de acciones ni precio medio.</p>';
-  const pesos = (c.pesos || []).map(p => `<div class="capa"><span class="rotulo" style="font-size:10px">${esc(p.estrategia)}</span><span style="font:300 30px var(--titular)">${esc(p.peso)}</span></div>`).join('');
-  const movs = (c.movimientos || []).map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.estrategia)}</td><td><span class="estado ${m.operacion === 'Venta' ? 'estado--rojo' : 'estado--verde'}">${esc(m.operacion)}</span></td><td>${esc(m.antes)} → ${esc(m.despues)}</td><td>${esc(m.motivo)}</td></tr>`).join('');
-  return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida y qué he hecho</h1>
-    <p class="entradilla">Solo pesos. ${c.actualizado ? 'Actualizada el ' + esc(c.actualizado) + '.' : ''}</p>
-    <div class="capas">${pesos}</div>
-    <h2>Movimientos</h2><div class="tabla-caja"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Estrategia</th><th>Operación</th><th>Peso antes → después</th><th>Por qué</th></tr></thead><tbody>${movs}</tbody></table></div>`;
+  if (!c) return '<div class="rotulo">Cartera · pesos y movimientos</div><h1>En preparación</h1><p class="entradilla">Aquí irán los pesos por estrategia y por empresa, y los movimientos. Sin importes, número de acciones ni precio medio.</p>';
+  const barra = c.reparto.map((r, i) => `<div style="flex:${r.peso};background:${COLOR_ESTR[i % 4]}" title="${esc(r.estrategia)} ${pct(r.peso)}"></div>`).join('');
+  const leyenda = c.reparto.map((r, i) => `<div class="capa"><span class="rotulo" style="font-size:10px;display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:${COLOR_ESTR[i % 4]}"></span>${esc(r.estrategia)}</span><span style="font:300 30px var(--titular)">${pct(r.peso)}</span><span class="motivo">${esc(r.n)} ${r.estrategia === 'Tendencial' ? 'activos' : 'empresas'}</span></div>`).join('');
+  const tablas = c.estrategias.map(e => `<h2>${esc(e.estrategia)}</h2><div class="tabla-caja"><table>
+      <thead><tr><th>Empresa</th><th>Sector</th><th>Mercado</th><th style="text-align:right">Peso en la estrategia</th><th style="text-align:right">Peso total</th><th style="text-align:right">Precio</th><th style="text-align:right">${esc(e.horizonte)}</th><th style="text-align:right">Retorno anual esperado</th></tr></thead>
+      <tbody>${e.empresas.map(x => `<tr><td style="font:15px var(--serif)">${esc(x.empresa)}</td><td>${esc(x.sector)}</td><td>${esc(x.mercado)}</td>
+        <td style="text-align:right"><span style="display:inline-flex;align-items:center;gap:8px"><span style="display:inline-block;width:${Math.round((x.peso || 0) * 80)}px;height:6px;border-radius:3px;background:var(--pizarra)"></span>${pct(x.peso)}</span></td>
+        <td style="text-align:right">${pct(x.peso_total)}</td><td style="text-align:right">${precio(x.precio)}</td><td style="text-align:right">${precio(x.objetivo)}</td><td style="text-align:right">${pct(x.retorno)}</td></tr>`).join('')}</tbody></table></div>`).join('');
+  const tend = c.tendencial.length ? `<h2>Tendencial</h2><div class="tabla-caja"><table><thead><tr><th>Activo</th><th>Categoría</th><th>Ticker / ISIN</th><th style="text-align:right">% objetivo</th><th style="text-align:right">% real</th></tr></thead>
+      <tbody>${c.tendencial.map(t => `<tr><td style="font:15px var(--serif)">${esc(t.activo)}</td><td>${esc(t.categoria)}</td><td>${esc(t.ticker)}</td><td style="text-align:right">${pct(t.objetivo)}</td><td style="text-align:right">${pct(t.real)}</td></tr>`).join('')}</tbody></table></div>` : '';
+  const movs = c.movimientos.length ? `<h2>Movimientos</h2><div class="tabla-caja"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Cartera</th><th>Tipo</th></tr></thead>
+      <tbody>${c.movimientos.map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.cartera)}</td><td><span class="estado ${TIPO[m.tipo] || 'estado--nada'}">${esc(m.tipo)}</span></td></tr>`).join('')}</tbody></table></div>` : '';
+  return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida</h1>
+    <p class="entradilla">Solo pesos, sin importes. Precios y objetivos a ${esc(c.precios_a)}; el retorno anual esperado va del precio de ese día al objetivo.</p>
+    <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
+    <div class="capas" style="margin-top:14px">${leyenda}</div>
+    ${tablas}${tend}${movs}`;
 }
 
 function metodo() {
