@@ -162,6 +162,16 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 
 <script>
 'use strict';
+// Si GitHub Pages o el navegador sirven una versión vieja de esta página,
+// version.json (que nunca se guarda en caché) lo delata y se recarga con
+// una dirección nueva. El generador pone la huella al publicar.
+const VERSION_WEB = '9333dc3ec8a5';
+fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
+  if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
+    location.replace(location.pathname + '?v=' + v.web + location.hash);
+  }
+}).catch(() => {});
+
 const ALMACEN = 'walker-llave-v1';
 let llave = null, datos = null;
 const urls = {};
