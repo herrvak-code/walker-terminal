@@ -165,7 +165,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '74a7c29e3dc2';
+const VERSION_WEB = 'e6cf2c4916a6';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -438,7 +438,7 @@ function metodo() {
 
 function recursos() {
   if (!datos.lecturas.length) return '<div class="rotulo">Lecturas</div><h1>Lecturas de la semana</h1><p class="entradilla">Una selección semanal de lo que merece la pena leer, con una línea de por qué. Empieza pronto.</p>';
-  return `<div class="rotulo">Lecturas</div><h1>Lecturas de la semana</h1>${datos.lecturas.map(l => `<div class="prosa"><h2>${esc(l.fecha)}</h2>${l.html}</div>`).join('')}`;
+  return `<div class="rotulo">Lecturas</div><h1>Lecturas de la semana</h1>${datos.lecturas.map(l => `<div class="prosa"><h2>${esc(l.fecha)}</h2>${l.html}${l.pdf ? `<div style="margin-top:22px">${boton(l.pdf, 'Descargar la lectura (PDF)')}</div>` : ''}</div>`).join('')}`;
 }
 </script>
 </body>
