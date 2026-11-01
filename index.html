@@ -186,7 +186,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = 'f1c1fcb94131';
+const VERSION_WEB = '8799725d779b';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -424,21 +424,21 @@ function tablaEstrategia(e) {
     const rango = x.min_52 != null && x.max_52 != null && x.max_52 > x.min_52;
     const punto = rango ? Math.max(0, Math.min(100, (x.precio-x.min_52)/(x.max_52-x.min_52)*100)) : 0;
     const nombre = nombres.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(x.empresa)}</a>` : `<span class="nombre-empresa">${esc(x.empresa)}</span>`;
-    const faltaHorizonte = v && v.horizonte_anos !== 5 && v.tratamiento_horizonte !== 'normalizar_5';
+    const faltaHorizonte = v && v.horizonte_anos !== 5;
     const fuente = v ? `<button type="button" class="fuente-valoracion" data-pdf="${esc(v.documento)}">${v.tipo === 'seguimiento' ? 'Seguimiento' : 'Tesis'} ${fechaMercado(v.fecha)} · p. ${esc(v.pagina)}</button>` : '';
-    const normalizada = v && v.tratamiento_horizonte === 'normalizar_5';
+    const faltanFlujos = v && !v.flujos;
     return `<tr><td>${nombre}<small>${esc(x.ticker)}${x.ticker && x.sector ? ' · ' : ''}${esc(x.sector || '')}</small></td>
       <td>${rango ? `<div class="rango-52" role="img" aria-label="Precio entre mínimo ${precio(x.min_52)} y máximo ${precio(x.max_52)} de 52 semanas"><span style="left:${punto}%"></span></div><small>${precio(x.min_52)} – ${precio(x.max_52)}</small>` : '—'}</td>
       <td>${precio(x.precio)}<small>${esc(x.moneda)} · ${fechaMercado(x.fecha_precio)}${!x.actualizado ? ' · dato guardado' : ''}</small></td>
       <td>${v ? precio(v.objetivo) : '—'}<small>${v ? `${esc(v.moneda)} · ${esc(v.fecha_objetivo || '5 años')} · ${esc(v.metodo)}` : 'Sin valoración publicada'}</small>${fuente}</td>
-      <td><span class="${x.retorno == null ? '' : `retorno${x.retorno < 0 ? ' retorno--negativo' : ''}`}">${pct(x.retorno)}</span>${faltaHorizonte ? '<small>Pendiente de revisar<br>a cinco años</small>' : normalizada ? '<small>Anualizado a 5 años;<br>plazo original distinto</small>' : ''}</td>
+      <td><span class="${x.retorno == null ? '' : `retorno${x.retorno < 0 ? ' retorno--negativo' : ''}`}">${pct(x.retorno)}</span>${faltaHorizonte ? '<small>Pendiente de revisar<br>a cinco años</small>' : faltanFlujos ? '<small>Flujos del modelo<br>pendientes</small>' : ''}</td>
       <td>${precio(x.precio_15)}${x.precio_15 != null ? `<small>${esc(x.moneda)}</small>` : ''}</td>
       <td><small>Por confirmar</small></td></tr>`;
   }).join('');
   return `<div class="cabecera-tabla"><h2>Valoración y seguimiento</h2><span class="nota-gris">Horizonte común · 5 años</span></div>
-    <div class="tabla-caja tabla-seguimiento"><table><thead><tr><th>Empresa / sector</th><th>Rango 52 sem.</th><th>Precio<br>actual</th><th>Objetivo de<br>la tesis vigente</th><th aria-sort="${orden === 'desc' ? 'descending' : orden === 'asc' ? 'ascending' : 'none'}"><button type="button" class="orden-tabla" data-orden-estrategia="${esc(e.id)}">Retorno anual<br>estimado ${orden === 'desc' ? '↓' : orden === 'asc' ? '↑' : '↕'}</button></th><th>Precio para<br>15 % anual</th><th>Próximos<br>resultados</th></tr></thead><tbody>${cuerpo}</tbody></table></div>
-    <div class="notas-tabla"><p>Retorno del precio, sin dividendos: subida hasta el objetivo anualizada en cinco años. El precio para el 15 % usa la misma base. No son la TIR total de la tesis.</p>
-    <p>Caso central de la última valoración publicada, incluida una revisión posterior en un seguimiento. Cada objetivo enlaza a su documento de origen. Sin valoración publicada o con un plazo distinto pendiente de revisión, se muestra «—».</p></div>`;
+    <div class="tabla-caja tabla-seguimiento"><table><thead><tr><th>Empresa / sector</th><th>Rango 52 sem.</th><th>Precio<br>actual</th><th>Objetivo de<br>la tesis vigente</th><th aria-sort="${orden === 'desc' ? 'descending' : orden === 'asc' ? 'ascending' : 'none'}"><button type="button" class="orden-tabla" data-orden-estrategia="${esc(e.id)}">Rentabilidad total<br>anual · 5 años ${orden === 'desc' ? '↓' : orden === 'asc' ? '↑' : '↕'}</button></th><th>Precio para<br>15 % anual</th><th>Próximos<br>resultados</th></tr></thead><tbody>${cuerpo}</tbody></table></div>
+    <div class="notas-tabla"><p>Rentabilidad total: TIR con los dividendos por acción y el precio de venta del caso central del maestro. El precio para el 15 % descuenta esos mismos cobros a cinco años.</p>
+    <p>Caso central de la última valoración publicada, incluida una revisión posterior en un seguimiento. Cada objetivo enlaza a su documento de origen. Sin flujos verificados o con un plazo distinto pendiente de revisión, se muestra «—».</p></div>`;
 }
 
 function watchlist() {
@@ -483,7 +483,7 @@ function cartera() {
   const barra = c.reparto.map((r, i) => `<div style="flex:${r.peso};background:${COLOR_ESTR[i % 4]}" title="${esc(r.estrategia)} ${pct(r.peso)}"></div>`).join('');
   const leyenda = c.reparto.map((r, i) => `<div class="capa"><span class="rotulo" style="font-size:10px;display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:${COLOR_ESTR[i % 4]}"></span>${esc(r.estrategia)}</span><span style="font:300 30px var(--titular)">${pct(r.peso)}</span><span class="motivo">${esc(r.n)} ${r.estrategia === 'Tendencial' ? 'activos' : 'empresas'}</span></div>`).join('');
   const tablas = c.estrategias.map(e => `<h2>${esc(e.estrategia)}</h2><div class="tabla-caja"><table>
-      <thead><tr><th>Empresa</th><th>Sector</th><th>Mercado</th><th style="text-align:right">Peso en la estrategia</th><th style="text-align:right">Peso total</th><th style="text-align:right">Precio</th><th style="text-align:right">${esc(e.horizonte)}</th><th style="text-align:right">Retorno anual a 5 años, sin dividendos</th></tr></thead>
+      <thead><tr><th>Empresa</th><th>Sector</th><th>Mercado</th><th style="text-align:right">Peso en la estrategia</th><th style="text-align:right">Peso total</th><th style="text-align:right">Precio</th><th style="text-align:right">${esc(e.horizonte)}</th><th style="text-align:right">Rentabilidad total anual a 5 años</th></tr></thead>
       <tbody>${e.empresas.map(x => `<tr><td style="font:15px var(--serif)">${esc(x.empresa)}</td><td>${esc(x.sector)}</td><td>${esc(x.mercado)}</td>
         <td style="text-align:right"><span style="display:inline-flex;align-items:center;gap:8px"><span style="display:inline-block;width:${Math.round((x.peso || 0) * 80)}px;height:6px;border-radius:3px;background:var(--pizarra)"></span>${pct(x.peso)}</span></td>
         <td style="text-align:right">${pct(x.peso_total)}</td><td style="text-align:right">${precio(x.precio)}</td><td style="text-align:right">${precio(x.objetivo)}</td><td style="text-align:right">${pct(x.retorno)}</td></tr>`).join('')}</tbody></table></div>`).join('');
@@ -492,7 +492,7 @@ function cartera() {
     : '<h2>Movimientos</h2><p class="vacio" style="margin-top:0">Los movimientos se publican a partir de enero de 2027.</p>';
   return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida</h1>
     <p class="entradilla">Solo pesos, sin importes, sobre el total de Dividendos, Quality · Growth · Value y Alpha.</p>
-    <p class="nota-gris" style="margin-top:8px">Posiciones a ${esc(c.posiciones_a)}. Pesos calculados a ${esc(c.precios_a)}. Los precios y sus fechas individuales se detallan en Estrategias. Objetivos del caso central de la última valoración publicada; retorno del precio anualizado en cinco años, sin dividendos. «—» indica valoración pendiente o plazo pendiente de revisión.${c.cambios_congelados ? ' Tipos de cambio guardados: ' + esc(c.cambios_congelados) + '.' : ''}</p>
+    <p class="nota-gris" style="margin-top:8px">Posiciones a ${esc(c.posiciones_a)}. Pesos calculados a ${esc(c.precios_a)}. Los precios y sus fechas individuales se detallan en Estrategias. Objetivos del caso central de la última valoración publicada; rentabilidad total anual a cinco años con los dividendos previstos por el modelo. «—» indica valoración pendiente o plazo pendiente de revisión.${c.cambios_congelados ? ' Tipos de cambio guardados: ' + esc(c.cambios_congelados) + '.' : ''}</p>
     <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
     <div class="capas" style="margin-top:14px">${leyenda}</div>
     ${tablas}${movs}`;
