@@ -186,7 +186,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '8799725d779b';
+const VERSION_WEB = 'f6422b3445a0';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -301,7 +301,7 @@ function todas() {
   datos.watchlist.forEach(x => lista.push({ x, origen: 'Watchlist', ruta: '#/watchlist' }));
   return lista;
 }
-function ndocs(x) { return x.tesis.length + x.trimestres.reduce((n, t) => n + t.docs.length, 0); }
+function ndocs(x) { return x.tesis.length + (x.complementos || []).length + x.trimestres.reduce((n, t) => n + t.docs.length, 0); }
 function ultimo(x) {
   const t = x.trimestres[0];
   if (!t) return 'sin seguimientos todavía';
@@ -456,6 +456,9 @@ function empresa(id) {
   const trimestres = x.trimestres.length ? x.trimestres.map(t => `<div class="trimestre"><div class="periodo">${esc(t.periodo)}</div>
       <div class="botones">${t.docs.map(d => boton(d.f, d.tipo + (d.fecha ? ' · ' + d.fecha : ''), 'boton--suave')).join('')}</div></div>`).join('')
     : '<p class="vacio">La primera ficha previa saldrá unos días antes de los próximos resultados.</p>';
+  const complementos = (x.complementos || []).map(d => `<div class="trimestre"><div class="periodo">${esc(d.fecha)}</div>
+      <div class="botones"><div>${boton(d.f, d.titulo + ' (PDF)', 'boton--suave')}
+        ${d.descripcion ? `<p class="nota-gris" style="margin:8px 0 0">${esc(d.descripcion)}</p>` : ''}</div></div></div>`).join('');
   const anteriores = x.tesis.slice(1);
   return `<a class="volver" href="${r.ruta}">← Volver a ${esc(r.origen)}</a>
     <div class="ficha">
@@ -466,6 +469,7 @@ function empresa(id) {
         ${x.titular ? `<p class="titular-tesis" style="font-size:21px;margin-top:12px">«${esc(x.titular)}»${x.subtitular ? ' ' + esc(x.subtitular) : ''}</p>` : ''}
         <div style="margin-top:18px">${boton(x.tesis[0].f, 'Tesis vigente · ' + x.tesis[0].fecha + ' (PDF)')}</div></div>
     </div>
+    ${complementos ? `<h2>Lecturas complementarias</h2>${complementos}` : ''}
     <h2>Trimestre a trimestre</h2>
     <p class="nota-gris" style="margin:0 0 4px">El más reciente arriba. La ficha previa fija antes del dato qué confirma la tesis y qué la pone en alerta; el seguimiento lo contrasta.</p>
     ${trimestres}
@@ -509,3 +513,4 @@ function recursos() {
 </script>
 </body>
 </html>
+
