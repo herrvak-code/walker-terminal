@@ -108,26 +108,75 @@ main{flex:999 1 560px;min-width:0;padding:40px clamp(18px,4vw,64px) 64px}
 .etiqueta{align-self:flex-start;display:inline-block;padding:2px 8px;border-radius:99px;background:var(--ocre-suave);color:var(--ambar-t);font:600 11px var(--sans)}
 .tambien{margin-top:30px;border-top:1px solid var(--linea);padding-top:14px;font-size:15px;color:var(--texto-2)}
 
-/* Seguimiento de las estrategias: misma fuente para objetivo y procedencia. */
-.tabla-seguimiento{margin-top:8px}
-.tabla-seguimiento table{min-width:850px;font-variant-numeric:tabular-nums}
-.tabla-seguimiento th{letter-spacing:0;text-transform:none;font-size:11px;vertical-align:bottom;text-align:right}
-.tabla-seguimiento th:first-child,.tabla-seguimiento td:first-child{text-align:left}
-.tabla-seguimiento td{text-align:right;vertical-align:middle}
-.tabla-seguimiento tbody tr:nth-child(even){background:var(--papel-2)}
-.tabla-seguimiento td small{display:block;margin-top:4px;font:11px/1.4 var(--sans);color:var(--gris);white-space:normal}
-.tabla-seguimiento .nombre-empresa{font:400 16px var(--serif);color:var(--texto);text-decoration:none}
-.tabla-seguimiento a.nombre-empresa:hover{text-decoration:underline}
-.tabla-seguimiento .retorno{font-weight:600;font-size:15px;color:var(--verde-t);white-space:nowrap}
-.tabla-seguimiento .retorno--negativo{color:var(--rojo-t)}
-.tabla-seguimiento .rango-52{position:relative;width:82px;height:5px;margin:0 0 8px auto;background:var(--linea);border-radius:4px}
-.tabla-seguimiento .rango-52 span{position:absolute;top:-2px;width:9px;height:9px;border-radius:50%;background:var(--pizarra);transform:translateX(-50%)}
-.orden-tabla{border:0;background:none;color:inherit;padding:4px 0;font:inherit;cursor:pointer}
+/* Rentabilidad por estrategia y cartera (rediseño del 06/11/2026, opción B elegida por Jose):
+   la rentabilidad esperada es lo primero que se lee; los datos no cambian. */
+.panel{margin-top:22px;background:var(--blanco);border:1px solid var(--linea);border-radius:10px;box-shadow:0 6px 24px rgba(27,23,18,.07);overflow:hidden}
+.panel-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;padding:18px 22px 14px;border-bottom:1px solid var(--linea)}
+.panel-cab h2{margin:0;border:0;padding:0;font-size:26px}
+.panel-cab .nota-gris{font-size:12px}
+.cifra-tir{font:600 26px/1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--verde-t);white-space:nowrap}
+.cifra-tir--negativa{color:var(--rojo-t)}
+.cifra-tir--nada{color:var(--linea-2);font-weight:400}
+.ranking .fila{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(200px,1.6fr) minmax(250px,1.4fr);gap:8px 22px;align-items:center;padding:16px 22px;border-top:1px solid #EFE8DB}
+.ranking .fila:first-of-type{border-top:0}
+.ranking .nombre-empresa{font:400 19px var(--titular);color:var(--texto);text-decoration:none}
+.ranking a.nombre-empresa:hover{text-decoration:underline}
+.ranking small{display:block;font:11px/1.45 var(--sans);color:var(--gris)}
+.ranking .medida{display:flex;align-items:center;gap:14px}
+.ranking .medida .cifra-tir{min-width:88px}
+.pista{position:relative;flex:1;height:10px;background:var(--papel-2);border-radius:5px}
+.pista b{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--verde-t)}
+.pista .vara{position:absolute;top:-6px;bottom:-6px;border-left:1.5px dashed var(--ocre)}
+.pista .vara em{position:absolute;top:-17px;left:-14px;font:600 10px var(--sans);font-style:normal;color:var(--ocre);white-space:nowrap}
+.ranking .datos{font:13px/1.45 var(--sans);text-align:right;font-variant-numeric:tabular-nums;color:var(--texto-2)}
+.ranking .datos strong{font-weight:600;color:var(--texto)}
+.rango-52{position:relative;display:inline-block;width:70px;height:4px;margin:0 6px 2px 0;background:var(--linea);border-radius:4px;vertical-align:middle}
+.rango-52 span{position:absolute;top:-2px;width:8px;height:8px;border-radius:50%;background:var(--pizarra);transform:translateX(-50%)}
+.pendientes{padding:14px 22px;background:var(--papel-2);border-top:1px solid var(--linea);font:13px/1.6 var(--sans);color:var(--texto-2)}
+.pendientes a{color:var(--texto)}
 .fuente-valoracion{border:0;background:none;padding:0;color:var(--pizarra);font:11px/1.4 var(--sans);text-decoration:underline;cursor:pointer;min-height:28px}
-.cabecera-tabla{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:34px;border-bottom:1.5px solid var(--texto);padding-bottom:8px}
-.cabecera-tabla h2{margin:0;border:0;padding:0}
 .notas-tabla{margin:10px 0 0;font:12px/1.5 var(--sans);color:var(--gris)}
 .notas-tabla p{margin:4px 0}
+@media (max-width:720px){
+  .panel-cab{padding:16px 16px 12px}
+  .ranking .fila{grid-template-columns:1fr;padding:14px 16px}
+  .ranking .datos{text-align:left}
+  .ranking .medida{margin-top:14px}
+  .pendientes{padding:12px 16px}
+}
+/* Cartera */
+.reparto{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.reparto a{display:block;padding:18px 20px;border-radius:10px;color:#fff;text-decoration:none}
+.reparto a:hover{color:#fff;filter:brightness(1.08)}
+.reparto .rotulo{color:rgba(255,255,255,.82)}
+.reparto .cifra{display:block;margin-top:6px;font:300 46px/1 var(--titular)}
+.reparto small{display:block;margin-top:6px;font:13px var(--sans);color:rgba(255,255,255,.88)}
+.posiciones .cab,.posiciones .fila{display:grid;grid-template-columns:minmax(140px,1.3fr) minmax(160px,2fr) 62px 84px 84px 80px;gap:6px 14px;align-items:center;padding:11px 22px;font:13px var(--sans);font-variant-numeric:tabular-nums}
+.posiciones .cab{padding-top:9px;padding-bottom:9px;background:var(--papel-2);font:600 11px/1.3 var(--sans);color:var(--gris)}
+.posiciones .cab span:nth-child(n+3),.posiciones .num{text-align:right}
+.posiciones .fila{border-top:1px solid #EFE8DB}
+.posiciones .nombre-empresa{font:400 17px var(--serif);color:var(--texto);text-decoration:none}
+.posiciones a.nombre-empresa:hover{text-decoration:underline}
+.posiciones small{display:block;font:11px/1.4 var(--sans);color:var(--gris)}
+.posiciones .peso{display:flex;align-items:center;gap:10px}
+.posiciones .peso i{display:block;height:12px;border-radius:3px;flex:none}
+.posiciones .tir{text-align:right;font:600 16px var(--sans);color:var(--verde-t)}
+.posiciones .tir--nada{color:var(--linea-2);font-weight:400}
+.posiciones .tir--negativa{color:var(--rojo-t)}
+.posiciones .peso-estr{color:var(--texto)}
+.posiciones .objetivo-movil{display:none}
+@media (max-width:720px){
+  .posiciones .cab,.posiciones .fila{grid-template-columns:1fr 70px 70px;padding:10px 16px}
+  .posiciones .cab span:nth-child(2),.posiciones .cab span:nth-child(4),.posiciones .cab span:nth-child(5){display:none}
+  .posiciones .peso{grid-column:1/-1;order:5}
+  .posiciones .precio{display:none}
+  .posiciones .objetivo-movil{display:block}
+  .reparto{grid-template-columns:repeat(3,1fr);gap:8px}
+  .reparto a{padding:12px 10px}
+  .reparto .rotulo{font-size:9px;letter-spacing:.08em}
+  .reparto .cifra{font-size:28px}
+  .reparto small{font-size:11px}
+}
 
 /* ---------- Empresa ---------- */
 .volver{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 13px var(--sans);text-decoration:none}
@@ -186,7 +235,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = 'f6422b3445a0';
+const VERSION_WEB = '4ae24ba48c61';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -343,11 +392,6 @@ function pintar() {
   document.getElementById('contenido').innerHTML = html + avisoLegal();
   window.scrollTo(0, 0);
   document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', () => abrirPdf(b.dataset.pdf)));
-  document.querySelectorAll('[data-orden-estrategia]').forEach(b => b.addEventListener('click', () => {
-    const id = b.dataset.ordenEstrategia;
-    ordenEstrategias[id] = ordenEstrategias[id] === 'desc' ? 'asc' : 'desc';
-    pintar();
-  }));
   document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, 'image/jpeg'); });
 }
 
@@ -402,43 +446,69 @@ function estrategias(id) {
     ${e.tambien ? `<p class="tambien"><span class="rotulo" style="font-size:10px">También en cartera, con su tesis en camino · </span>${esc(e.tambien)}</p>` : ''}`;
 }
 
-const ordenEstrategias = {};
 function fechaMercado(valor) {
   if (!valor) return 'Sin fecha';
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) return valor;
   const d = new Date(valor);
   return Number.isNaN(d.getTime()) ? 'Sin fecha' : d.toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid' });
 }
+// Rediseño del 06/11/2026 (opción B): ranking por rentabilidad, de mayor a menor,
+// con una barra por empresa y la marca del 15 %. Mismos datos que la tabla anterior.
+const claseTir = r => r == null ? 'cifra-tir cifra-tir--nada' : 'cifra-tir' + (r < 0 ? ' cifra-tir--negativa' : '');
+function fuenteValoracion(v) {
+  return v ? `<button type="button" class="fuente-valoracion" data-pdf="${esc(v.documento)}">${v.tipo === 'seguimiento' ? 'Seguimiento' : 'Tesis'} ${fechaMercado(v.fecha)} · p. ${esc(v.pagina)}</button>` : '';
+}
+// Texto neutro a propósito: un plazo o un calendario en revisión no se describe
+// al suscriptor (Jose, 06/11/2026). Solo se distingue si hay o no valoración.
+function motivoPendiente(x) {
+  return x.valoracion ? 'en revisión' : 'sin valoración publicada';
+}
+// Horizonte de la rentabilidad (redacción de la sesión del calendario de la TIR, 06/11/2026):
+// Quality vende al publicarse las cuentas de 2030. En las demás se deduce de horizonte_anos:
+// «a cinco años» solo si todas las valoraciones con rentabilidad tienen cinco años.
+const HORIZONTE = { qgv: ['hasta la publicación de las cuentas de 2030', 'hasta 2031'] };
+function horizonte(id) {
+  if (HORIZONTE[id]) return HORIZONTE[id];
+  const e = datos.estrategias.find(x => x.id === id);
+  const todas5 = (e && e.tabla || []).filter(x => x.retorno != null).every(x => x.valoracion.horizonte_anos === 5);
+  return todas5 ? ['a cinco años', '5 años'] : ['hasta la venta de cada modelo', 'hasta la venta'];
+}
+const horizonteLargo = id => horizonte(id)[0];
+const horizonteCorto = id => horizonte(id)[1];
+function pesoEnEstrategia(e, ticker) {
+  const c = datos.cartera && datos.cartera.estrategias.find(x => x.estrategia === e.titulo);
+  const p = c && ticker && c.empresas.find(x => x.ticker === ticker);
+  return p ? p.peso : null;
+}
 function tablaEstrategia(e) {
   const filas = [...(e.tabla || [])];
   if (!filas.length) return '<p class="vacio">Todavía no hay datos de seguimiento para esta estrategia.</p>';
-  const orden = ordenEstrategias[e.id];
-  if (orden) filas.sort((a, b) => {
-    if (a.retorno == null) return b.retorno == null ? 0 : 1;
-    if (b.retorno == null) return -1;
-    return orden === 'desc' ? b.retorno-a.retorno : a.retorno-b.retorno;
-  });
+  const con = filas.filter(x => x.retorno != null).sort((a, b) => b.retorno - a.retorno);
+  const sin = filas.filter(x => x.retorno == null);
   const nombres = new Set(e.empresas.map(x => x.ticker));
-  const cuerpo = filas.map(x => {
-    const v = x.valoracion;
+  const enlace = x => nombres.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(x.empresa)}</a>` : `<span class="nombre-empresa">${esc(x.empresa)}</span>`;
+  // Escala de las barras: de 0 a 20 %, o hasta la mayor rentabilidad si la supera.
+  const tope = Math.max(0.20, ...con.map(x => x.retorno));
+  const cuerpo = con.map(x => {
+    const v = x.valoracion, peso = pesoEnEstrategia(e, x.ticker);
     const rango = x.min_52 != null && x.max_52 != null && x.max_52 > x.min_52;
     const punto = rango ? Math.max(0, Math.min(100, (x.precio-x.min_52)/(x.max_52-x.min_52)*100)) : 0;
-    const nombre = nombres.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(x.empresa)}</a>` : `<span class="nombre-empresa">${esc(x.empresa)}</span>`;
-    const faltaHorizonte = v && v.horizonte_anos !== 5;
-    const fuente = v ? `<button type="button" class="fuente-valoracion" data-pdf="${esc(v.documento)}">${v.tipo === 'seguimiento' ? 'Seguimiento' : 'Tesis'} ${fechaMercado(v.fecha)} · p. ${esc(v.pagina)}</button>` : '';
-    const faltanFlujos = v && !v.flujos;
-    return `<tr><td>${nombre}<small>${esc(x.ticker)}${x.ticker && x.sector ? ' · ' : ''}${esc(x.sector || '')}</small></td>
-      <td>${rango ? `<div class="rango-52" role="img" aria-label="Precio entre mínimo ${precio(x.min_52)} y máximo ${precio(x.max_52)} de 52 semanas"><span style="left:${punto}%"></span></div><small>${precio(x.min_52)} – ${precio(x.max_52)}</small>` : '—'}</td>
-      <td>${precio(x.precio)}<small>${esc(x.moneda)} · ${fechaMercado(x.fecha_precio)}${!x.actualizado ? ' · dato guardado' : ''}</small></td>
-      <td>${v ? precio(v.objetivo) : '—'}<small>${v ? `${esc(v.moneda)} · ${esc(v.fecha_objetivo || '5 años')} · ${esc(v.metodo)}` : 'Sin valoración publicada'}</small>${fuente}</td>
-      <td><span class="${x.retorno == null ? '' : `retorno${x.retorno < 0 ? ' retorno--negativo' : ''}`}">${pct(x.retorno)}</span>${faltaHorizonte ? '<small>Pendiente de revisar<br>a cinco años</small>' : faltanFlujos ? '<small>Flujos del modelo<br>pendientes</small>' : ''}</td>
-      <td>${precio(x.precio_15)}${x.precio_15 != null ? `<small>${esc(x.moneda)}</small>` : ''}</td>
-      <td><small>Por confirmar</small></td></tr>`;
+    const ancho = Math.max(0, Math.min(100, x.retorno / tope * 100));
+    return `<div class="fila"><div>${enlace(x)}<small>${esc(x.ticker)}${x.sector ? ' · ' + esc(x.sector) : ''}${peso != null ? ' · ' + pct(peso) + ' de la estrategia' : ''}</small></div>
+      <div class="medida"><span class="${claseTir(x.retorno)}">${pct(x.retorno)}</span><div class="pista" role="img" aria-label="Rentabilidad ${pct(x.retorno)} frente al 15 %"><b style="width:${ancho}%"></b><span class="vara" style="left:${0.15 / tope * 100}%"><em>15 %</em></span></div></div>
+      <div class="datos">Hoy <strong>${precio(x.precio)}</strong> → objetivo <strong>${precio(v.objetivo)}</strong> ${esc(x.moneda)}
+        <small>Precio para el 15 % anual: ${precio(x.precio_15)} · ${esc(v.metodo)}${v.fecha_objetivo ? ' · ' + esc(v.fecha_objetivo) : ''}</small>
+        ${rango ? `<small><span class="rango-52" role="img" aria-label="Precio entre mínimo ${precio(x.min_52)} y máximo ${precio(x.max_52)} de 52 semanas"><span style="left:${punto}%"></span></span>52 sem. ${precio(x.min_52)} – ${precio(x.max_52)}</small>` : ''}
+        <small>Precio a ${fechaMercado(x.fecha_precio)}${!x.actualizado ? ' (dato guardado)' : ''} · resultados por confirmar</small>
+        ${fuenteValoracion(v)}</div></div>`;
   }).join('');
-  return `<div class="cabecera-tabla"><h2>Valoración y seguimiento</h2><span class="nota-gris">Horizonte común · 5 años</span></div>
-    <div class="tabla-caja tabla-seguimiento"><table><thead><tr><th>Empresa / sector</th><th>Rango 52 sem.</th><th>Precio<br>actual</th><th>Objetivo de<br>la tesis vigente</th><th aria-sort="${orden === 'desc' ? 'descending' : orden === 'asc' ? 'ascending' : 'none'}"><button type="button" class="orden-tabla" data-orden-estrategia="${esc(e.id)}">Rentabilidad total<br>anual · 5 años ${orden === 'desc' ? '↓' : orden === 'asc' ? '↑' : '↕'}</button></th><th>Precio para<br>15 % anual</th><th>Próximos<br>resultados</th></tr></thead><tbody>${cuerpo}</tbody></table></div>
-    <div class="notas-tabla"><p>Rentabilidad total: TIR con los dividendos por acción y el precio de venta del caso central del maestro. El precio para el 15 % descuenta esos mismos cobros a cinco años.</p>
-    <p>Caso central de la última valoración publicada, incluida una revisión posterior en un seguimiento. Cada objetivo enlaza a su documento de origen. Sin flujos verificados o con un plazo distinto pendiente de revisión, se muestra «—».</p></div>`;
+  const pendientes = sin.length ? `<div class="pendientes"><strong>Sin rentabilidad todavía</strong> · ${sin.map(x => {
+    return `${enlace(x).replace('nombre-empresa', '')} <span class="nota-gris">(${esc(motivoPendiente(x))})</span>`;
+  }).join(' · ')}</div>` : '';
+  return `<div class="panel ranking"><div class="panel-cab"><h2>Rentabilidad esperada</h2><span class="nota-gris">TIR total anual ${esc(horizonteLargo(e.id))} · de mayor a menor · la línea marca el 15 %</span></div>
+    ${cuerpo}${pendientes}</div>
+    <div class="notas-tabla"><p>Rentabilidad total: TIR con los dividendos por acción y el precio de venta del caso central del maestro. Precio para el 15 %: precio al que la TIR del caso central, con los mismos dividendos y la misma venta, sería del 15 %.</p>
+    <p>Caso central de la última valoración publicada, incluida una revisión posterior en un seguimiento. Cada objetivo enlaza a su documento de origen. Las empresas sin valoración publicada o con la valoración en revisión aparecen en «Sin rentabilidad todavía».</p></div>`;
 }
 
 function watchlist() {
@@ -481,25 +551,42 @@ const precio = v => (v === null || v === undefined || v === '') ? '—' : Number
 const COLOR_ESTR = ['#2E5F73', '#8E6A2F', '#2E4D73', '#A89B84'];
 const TIPO = { 'Cierre': 'estado--rojo', 'Cierre excision': 'estado--rojo', 'Reducción': 'estado--ambar', 'Compra': 'estado--verde', 'Ampliación': 'estado--verde' };
 
+const COLOR_POR_ESTR = { 'Dividendos': '#2E5F73', 'Quality · Growth · Value': '#8E6A2F', 'Alpha': '#2E4D73' };
+const colorEstr = (nombre, i) => COLOR_POR_ESTR[nombre] || COLOR_ESTR[i % 4];
 function cartera() {
   const c = datos.cartera;
   if (!c) return '<div class="rotulo">Cartera · pesos y movimientos</div><h1>En preparación</h1><p class="entradilla">Aquí irán los pesos por estrategia y por empresa, y los movimientos. Sin importes, número de acciones ni precio medio.</p>';
-  const barra = c.reparto.map((r, i) => `<div style="flex:${r.peso};background:${COLOR_ESTR[i % 4]}" title="${esc(r.estrategia)} ${pct(r.peso)}"></div>`).join('');
-  const leyenda = c.reparto.map((r, i) => `<div class="capa"><span class="rotulo" style="font-size:10px;display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:${COLOR_ESTR[i % 4]}"></span>${esc(r.estrategia)}</span><span style="font:300 30px var(--titular)">${pct(r.peso)}</span><span class="motivo">${esc(r.n)} ${r.estrategia === 'Tendencial' ? 'activos' : 'empresas'}</span></div>`).join('');
-  const tablas = c.estrategias.map(e => `<h2>${esc(e.estrategia)}</h2><div class="tabla-caja"><table>
-      <thead><tr><th>Empresa</th><th>Sector</th><th>Mercado</th><th style="text-align:right">Peso en la estrategia</th><th style="text-align:right">Peso total</th><th style="text-align:right">Precio</th><th style="text-align:right">${esc(e.horizonte)}</th><th style="text-align:right">Rentabilidad total anual a 5 años</th></tr></thead>
-      <tbody>${e.empresas.map(x => `<tr><td style="font:15px var(--serif)">${esc(x.empresa)}</td><td>${esc(x.sector)}</td><td>${esc(x.mercado)}</td>
-        <td style="text-align:right"><span style="display:inline-flex;align-items:center;gap:8px"><span style="display:inline-block;width:${Math.round((x.peso || 0) * 80)}px;height:6px;border-radius:3px;background:var(--pizarra)"></span>${pct(x.peso)}</span></td>
-        <td style="text-align:right">${pct(x.peso_total)}</td><td style="text-align:right">${precio(x.precio)}</td><td style="text-align:right">${precio(x.objetivo)}</td><td style="text-align:right">${pct(x.retorno)}</td></tr>`).join('')}</tbody></table></div>`).join('');
+  const idDe = nombre => (datos.estrategias.find(x => x.titulo === nombre) || {}).id;
+  const fichas = new Set(datos.estrategias.flatMap(e => e.empresas.map(x => x.ticker)));
+  const reparto = c.reparto.map((r, i) => {
+    const id = idDe(r.estrategia);
+    const dentro = `<span class="rotulo">${esc(r.estrategia)}</span><span class="cifra">${pct(r.peso)}</span><small>${esc(r.n)} ${r.estrategia === 'Tendencial' ? 'activos' : 'empresas'}${id ? ' · ver la estrategia →' : ''}</small>`;
+    return id ? `<a href="#/estrategias/${id}" style="background:${colorEstr(r.estrategia, i)}">${dentro}</a>` : `<a style="background:${colorEstr(r.estrategia, i)}">${dentro}</a>`;
+  }).join('');
+  const bloques = c.estrategias.map((e, i) => {
+    const color = colorEstr(e.estrategia, i);
+    const r = c.reparto.find(x => x.estrategia === e.estrategia);
+    const max = Math.max(...e.empresas.map(x => x.peso || 0)) || 1;
+    const filas = e.empresas.map(x => {
+      const nombre = x.nombre || x.empresa;
+      const n = x.ticker && fichas.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(nombre)}</a>` : `<span class="nombre-empresa">${esc(nombre)}</span>`;
+      return `<div class="fila"><div>${n}<small>${esc(x.sector)} · ${esc(x.mercado)}</small><small class="objetivo-movil">Precio ${precio(x.precio)} · objetivo ${precio(x.objetivo)}</small></div>
+        <div class="peso"><i style="width:${(x.peso || 0) / max * 80}%;background:${color}"></i><strong class="peso-estr">${pct(x.peso)}</strong></div>
+        <div class="num">${pct(x.peso_total)}</div><div class="num precio">${precio(x.precio)}</div><div class="num precio">${precio(x.objetivo)}</div>
+        <div class="tir${x.retorno == null ? ' tir--nada' : x.retorno < 0 ? ' tir--negativa' : ''}">${pct(x.retorno)}</div></div>`;
+    }).join('');
+    return `<div class="panel posiciones"><div class="panel-cab" style="border-left:6px solid ${color}"><h2>${esc(e.estrategia)}</h2><span style="font:300 32px var(--titular);color:${color}">${r ? pct(r.peso) : ''} <span class="nota-gris">del total · ${e.empresas.length} empresas</span></span></div>
+      <div class="cab"><span>Empresa</span><span>Peso en la estrategia</span><span>Peso total</span><span>Precio</span><span>${esc(e.horizonte)}</span><span>Rentabilidad total anual · ${esc(horizonteCorto(idDe(e.estrategia)))}</span></div>${filas}</div>`;
+  }).join('');
   const movs = c.movimientos.length ? `<h2>Movimientos</h2><div class="tabla-caja"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Cartera</th><th>Tipo</th></tr></thead>
       <tbody>${c.movimientos.map(m => `<tr><td>${esc(m.fecha)}</td><td style="font:15px var(--serif)">${esc(m.empresa)}</td><td>${esc(m.cartera)}</td><td><span class="estado ${TIPO[m.tipo] || 'estado--nada'}">${esc(m.tipo)}</span></td></tr>`).join('')}</tbody></table></div>`
     : '<h2>Movimientos</h2><p class="vacio" style="margin-top:0">Los movimientos se publican a partir de enero de 2027.</p>';
   return `<div class="rotulo">Cartera · pesos y movimientos</div><h1>Cómo está repartida</h1>
     <p class="entradilla">Solo pesos, sin importes, sobre el total de Dividendos, Quality · Growth · Value y Alpha.</p>
-    <p class="nota-gris" style="margin-top:8px">Posiciones a ${esc(c.posiciones_a)}. Pesos calculados a ${esc(c.precios_a)}. Los precios y sus fechas individuales se detallan en Estrategias. Objetivos del caso central de la última valoración publicada; rentabilidad total anual a cinco años con los dividendos previstos por el modelo. «—» indica valoración pendiente o plazo pendiente de revisión.${c.cambios_congelados ? ' Tipos de cambio guardados: ' + esc(c.cambios_congelados) + '.' : ''}</p>
-    <div style="margin-top:26px;display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px">${barra}</div>
-    <div class="capas" style="margin-top:14px">${leyenda}</div>
-    ${tablas}${movs}`;
+    <div class="reparto">${reparto}</div>
+    ${bloques}
+    <p class="nota-gris" style="margin-top:14px">Posiciones a ${esc(c.posiciones_a)}. Pesos calculados a ${esc(c.precios_a)}. Los precios y sus fechas individuales se detallan en Estrategias. Objetivos del caso central de la última valoración publicada; rentabilidad total anual con los dividendos previstos por el modelo hasta la fecha de venta de cada valoración, que se detalla en Estrategias. «—» indica valoración pendiente o en revisión.${c.cambios_congelados ? ' Tipos de cambio guardados: ' + esc(c.cambios_congelados) + '.' : ''}</p>
+    ${movs}`;
 }
 
 function metodo() {
