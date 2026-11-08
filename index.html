@@ -235,7 +235,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '4ae24ba48c61';
+const VERSION_WEB = '3d56275bcdd4';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -380,7 +380,9 @@ function pintar() {
     const r = todas().find(o => o.x.id === partes[1]);
     marcada = r && r.origen === 'Watchlist' ? 'watchlist' : 'estrategias';
   }
-  document.getElementById('menu').innerHTML = MENU.map(([g, items]) =>
+  // Sin cartera en los datos (salida pública, 08/11/2026) no se enseña el grupo «Mi cartera».
+  const menu = MENU.map(([g, items]) => [g, items.filter(([id]) => id !== 'cartera' || datos.cartera)]).filter(([, items]) => items.length);
+  document.getElementById('menu').innerHTML = menu.map(([g, items]) =>
     `<div class="grupo">${esc(g)}</div>` + items.map(([id, t, s]) => {
       const activa = id === marcada;
       return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
