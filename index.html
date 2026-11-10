@@ -249,6 +249,29 @@ a.rp-emp:hover .n{text-decoration:underline}
 .rp-salud i{flex:1;height:8px;border-radius:4px;background:#EEE9E0}
 .rp-salud i.intacta{background:#5E8F45} .rp-salud i.bajo_presion{background:#E3B04B} .rp-salud i.en_vigilancia{background:#A3A39B}
 .rp-pista{margin:18px 0 0;font:13px var(--sans);color:var(--gris)}
+.rp-fund{display:block;width:100%;height:auto;cursor:zoom-in;border:1px solid var(--linea);border-radius:8px;background:#fff}
+.rp-pista i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:4px;vertical-align:0}
+.rp-pista i.intacta,.rp-fila .pt i.intacta{background:#5E8F45} .rp-pista i.bajo_presion,.rp-fila .pt i.bajo_presion{background:#E3B04B} .rp-pista i.en_vigilancia,.rp-fila .pt i.en_vigilancia{background:#A3A39B}
+.rp-cabtab,.rp-fila{display:grid;grid-template-columns:62px minmax(0,1fr) 64px 92px 96px;gap:12px;align-items:center}
+.rp-cabtab{margin-top:22px;padding:0 6px 6px;font:12px var(--sans);color:var(--gris)}
+.rp-cabtab span:nth-child(n+4){text-align:right}
+.rp-grupo{display:flex;justify-content:space-between;margin:22px 0 4px;padding:0 6px;font:500 13px var(--sans);color:var(--gris)}
+a.rp-fila{padding:12px 6px;border-top:1px solid var(--linea);text-decoration:none;color:var(--texto)}
+a.rp-fila:hover{background:var(--papel-2)}
+.rp-fila .tk{font:600 14px var(--sans)}
+.rp-fila .ti{font:17px/1.3 var(--serif)}
+.rp-fila .ti small{display:block;margin-top:3px;font:12px var(--sans);color:var(--gris)}
+.rp-fila .up{color:#3B6B2A} .rp-fila .dn{color:var(--rojo-t)}
+.rp-fila .pt{display:flex;gap:4px}
+.rp-fila .pt i{width:9px;height:9px;border-radius:50%;background:#EEE9E0}
+.rp-hoy{text-align:right;font:600 15px var(--sans);font-variant-numeric:tabular-nums}
+.rp-hoy small{display:block;font:400 11px var(--sans);color:var(--gris)}
+.rp-hoy.ok{color:#3B6B2A} .rp-hoy.medio{color:#9A6A12} .rp-hoy.bajo{color:var(--rojo-t)}
+.rp-fila .px{text-align:right;font:13px var(--sans);color:var(--gris)}
+.rp-cal{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px;padding-top:14px;border-top:1px solid var(--linea)}
+.rp-cal span{padding:3px 9px;border-radius:6px;background:var(--papel-2);font:12px var(--sans);color:var(--gris)}
+.rp-cal b{font-weight:600;color:var(--texto)}
+@media (max-width:720px){ .rp-cabtab{display:none} .rp-fila{grid-template-columns:minmax(0,1fr) 68px;gap:2px 10px} .rp-fila .tk{grid-column:1;font-size:12px;color:var(--gris)} .rp-fila .ti{grid-column:1} .rp-fila .rp-hoy{grid-column:2;grid-row:1 / span 2} .rp-fila .pt,.rp-fila .px{display:none} }
 .rp-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap}
 .rp-cab .fecha{font:15px var(--sans);color:var(--gris)}
 .rp-dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
@@ -341,7 +364,7 @@ a.rp-emp:hover .n{text-decoration:underline}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '6208fe8e672b';
+const VERSION_WEB = 'd6261b8c2af5';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -521,7 +544,8 @@ function pintar() {
   document.getElementById('contenido').innerHTML = html + avisoLegal();
   window.scrollTo(0, 0);
   document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', () => abrirPdf(b.dataset.pdf)));
-  document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, 'image/jpeg'); });
+  document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, img.dataset.tipo || 'image/jpeg'); });
+  document.querySelectorAll('img.rp-fund').forEach(img => img.addEventListener('click', () => { if (img.src) window.open(img.src, '_blank'); }));
   const marco = document.querySelector('iframe[data-edicion]');
   if (marco) cargarEdicion(marco);
 }
@@ -835,30 +859,60 @@ function rpEstado(est) {
 }
 function repaso(id) { return id ? repasoEmpresa(id) : repasoPortada(); }
 
+// Portada (Jose, 10/11/2026): una tabla por estrategia con un titular de lo que
+// pasa en cada tesis, para animar a entrar en la ficha, y el calendario en una línea.
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
+function rpVeredictos(r) {
+  const n = { confirma: 0, debilita: 0 };
+  (r.linea_tiempo || []).forEach(h => (h.efectos || []).forEach(e => { if (e.veredicto in n) n[e.veredicto]++; }));
+  const partes = [];
+  if (n.debilita) partes.push(`<span class="dn">↓</span> ${n.debilita} ${n.debilita === 1 ? 'debilita' : 'debilitan'}`);
+  if (n.confirma) partes.push(`<span class="up">↑</span> ${n.confirma} ${n.confirma === 1 ? 'confirma' : 'confirman'}`);
+  return partes.length ? partes.join(' · ') : 'sin hechos nuevos desde la tesis';
+}
+function rpHoy(x, div) {
+  // Rentabilidad al precio de hoy (la de la tabla de Estrategias); si no la hay, la del caso central de la tesis.
+  const t = filaTabla(x.ticker), ti = x.repaso.tesis_inversion || {};
+  const vara = div ? 'pide 8–10 %' : 'pide 15 %';
+  let v = t && t.retorno != null ? t.retorno * 100 : null, nota = vara;
+  if (v == null && ti.central != null) { v = ti.central; nota = 'tesis · ' + vara; }
+  if (v == null) return '<span class="rp-hoy">—<small>pendiente</small></span>';
+  const cls = v >= (div ? 10 : 15) ? 'ok' : (div && v >= 8 ? 'medio' : 'bajo');
+  return `<span class="rp-hoy ${cls}">${pp(v)}<small>${esc(nota)}</small></span>`;
+}
+function rpProximo(r) {
+  const h = [...(r.proximos_hechos || [])].sort((a, b) => String(a.fecha).localeCompare(String(b.fecha)))[0];
+  return h ? esc(h.etiqueta) : '—';
+}
 function repasoPortada() {
-  const lista = conRepaso().map(o => o.x).sort((a, b) => rpPresion(b.repaso) - rpPresion(a.repaso) || a.nombre.localeCompare(b.nombre));
-  const nvar = lista.reduce((n, x) => n + x.repaso.variables.length, 0);
-  const npres = lista.reduce((n, x) => n + rpCuenta(x.repaso, 'bajo_presion'), 0);
-  const hace60 = new Date(Date.now() - 60 * 864e5).toISOString().slice(0, 10);
-  const nhechos = lista.reduce((n, x) => n + (x.repaso.linea_tiempo || []).filter(h => h.fecha >= hace60).length, 0);
-  // Solo el próximo hecho de cada empresa; el resto, en su ficha.
-  const porFecha = (a, b) => String(a.fecha).localeCompare(String(b.fecha));
-  const agenda = lista.map(x => ({ h: [...(x.repaso.proximos_hechos || [])].sort(porFecha)[0], x }))
-    .filter(o => o.h).map(o => ({ ...o.h, x: o.x })).sort(porFecha);
-  const filas = lista.map(x => {
-    const r = x.repaso, t = filaTabla(x.ticker), b = rpCuenta(r, 'bajo_presion'), v = rpCuenta(r, 'en_vigilancia');
-    const meta = [t && t.retorno != null ? pct(t.retorno) : null, b ? b + ' bajo presión' : 'sin presión', v ? v + ' en vigilancia' : null, r.desactualizado ? 'desactualizado' : null].filter(Boolean).join(' · ');
-    const barras = r.variables.map(v => `<i class="${v.estado ? esc(v.estado.valor) : ''}" title="${esc(v.nombre)}"></i>`).join('');
-    return `<a class="rp-emp" href="#/repaso/${encodeURIComponent(x.id)}"><div class="l"><span><span class="n">${esc(x.nombre)}</span> <span class="m">· ${esc(meta)}</span></span><span class="flecha" aria-hidden="true">›</span></div>
-      <div class="rp-salud">${barras}</div></a>`;
+  const grupos = datos.estrategias.map(e => ({ titulo: e.titulo, div: e.id === 'div', xs: e.empresas.filter(x => x.repaso) }))
+    .concat([{ titulo: 'Watchlist', div: false, xs: datos.watchlist.filter(x => x.repaso) }])
+    .filter(g => g.xs.length);
+  const tabla = grupos.map(g => {
+    const filas = [...g.xs].sort((a, b) => rpPresion(b.repaso) - rpPresion(a.repaso) || a.nombre.localeCompare(b.nombre)).map(x => {
+      const r = x.repaso;
+      const puntos = r.variables.map(v => `<i class="${v.estado ? esc(v.estado.valor) : ''}" title="${esc(v.nombre)}"></i>`).join('');
+      return `<a class="rp-fila" href="#/repaso/${encodeURIComponent(x.id)}"><span class="tk">${esc(x.ticker)}</span>
+        <span class="ti">${esc(r.titular || x.nombre)}<small>${rpVeredictos(r)}${r.desactualizado ? ' · falta el último seguimiento' : ''}</small></span>
+        <span class="pt">${puntos}</span>${rpHoy(x, g.div)}<span class="px">${rpProximo(r)}</span></a>`;
+    }).join('');
+    return `<div class="rp-grupo"><span>${esc(g.titulo)}</span><span>${g.xs.length} ${g.xs.length === 1 ? 'tesis' : 'tesis'}</span></div>${filas}`;
   }).join('');
+  // Calendario: los próximos hechos de todas las fichas, agrupados por mes.
+  const porMes = {};
+  conRepaso().forEach(o => (o.x.repaso.proximos_hechos || []).forEach(h => {
+    const m = String(h.fecha).slice(0, 7);
+    if (/^\d{4}-\d{2}$/.test(m)) (porMes[m] = porMes[m] || new Set()).add(o.x.ticker);
+  }));
+  const meses = Object.keys(porMes).sort().slice(0, 4);
+  const cal = meses.map(m => `<span><b>${MESES[+m.slice(5, 7) - 1]}</b> ${[...porMes[m]].map(esc).join(' · ')}</span>`).join('');
   return `<div class="rp-hoja"><div class="rp-tarjeta">
     <h1 class="rp-titulo">Repaso de tesis</h1>
-    <p class="rp-sub">${lista.length} tesis · ${npres} de ${nvar} variables bajo presión · ${nhechos} ${nhechos === 1 ? 'hecho' : 'hechos'} en 60 días</p>
-    ${agenda.length ? `<div class="rp-sec">Próximos hechos</div>${agenda.map(h => `<div class="rp-ag"><span class="f">${esc(h.etiqueta)}</span>
-      <span><a href="#/repaso/${encodeURIComponent(h.x.id)}">${esc(h.x.ticker)}</a> · ${esc(h.hecho)}</span></div>`).join('')}` : ''}
-    <div class="rp-sec" style="margin-top:30px">Por empresa</div>${filas}
-    <p class="rp-pista">Toca una empresa para abrir su ficha.</p></div></div>`;
+    <p class="rp-sub">Qué está pasando en cada tesis. Toca una fila para abrir su ficha.</p>
+    <div class="rp-cabtab"><span></span><span>Qué está pasando</span><span>Variables</span><span>Hoy</span><span>Próxima</span></div>
+    ${tabla}
+    ${cal ? `<div class="rp-cal">${cal}</div>` : ''}
+    <p class="rp-pista"><i class="bajo_presion"></i> bajo presión · <i class="en_vigilancia"></i> en vigilancia · <i class="intacta"></i> intacta</p></div></div>`;
 }
 
 function repasoEmpresa(id) {
@@ -918,6 +972,11 @@ function repasoEmpresa(id) {
       <div class="rp-fila2"><span>Caso central a ese precio</span><strong>${pct(t.retorno)}</strong></div>
       <p class="rp-nota">${div ? `El central da un 8 % por debajo de ${precio(t.precio_8)} ${esc(t.moneda || '')} y un 10 % por debajo de ${precio(t.precio_10)} ${esc(t.moneda || '')}.` : `Por debajo de ${precio(t.precio_15)} ${esc(t.moneda || '')} el central daría un 15 %.`} Precio a ${esc(fechaMercado(t.fecha_precio))}${!t.actualizado ? ' (dato guardado)' : ''}.</p></div>`;
   }
+  // Tabla de fundamentales (Jose, 10/11/2026): la imagen que deja el seguimiento, si la hay.
+  let sec = 2;
+  const fund = r.fundamentales ? `<div class="rp-sec">${++sec} · Fundamentales</div>
+    <img class="rp-fund" data-img="${esc(r.fundamentales.f)}" data-tipo="image/png" alt="Tabla de fundamentales de ${esc(x.nombre)}">
+    <p class="rp-nota">Tabla del ${esc(r.fundamentales.fecha)}. Tócala para verla en grande. Las lecturas en color se calculan por regla; las marcadas con ✎ son juicio.</p>` : '';
   return `<a class="volver" href="#/repaso">← Repaso</a>
     <div class="rp-hoja"><div class="rp-tarjeta">
     <div class="rp-cab"><h1 class="rp-titulo">${esc(x.nombre)} · ${esc(x.ticker)} · ${esc(estrategiaDe(x))}</h1><span class="fecha">Tesis ${esc(isoDmy(r.tesis.fecha))}</span></div>
@@ -925,10 +984,13 @@ function repasoEmpresa(id) {
     ${r.desactualizado ? '<div class="rp-rompe" style="margin-top:14px">Este repaso no recoge todavía el último seguimiento publicado.</div>' : ''}
     <div class="rp-sec">1 · Las dos tesis</div>
     <div class="rp-dos"><div class="rp-caja"><div class="et">Negocio</div><div class="v ${tn.estado ? esc(tn.estado.valor) : ''}">${tn.estado ? esc(RP_ESTADO[tn.estado.valor]) : '—'}</div><div class="d">${esc(tn.datos || '')}</div></div>
-      <div class="rp-caja"><div class="et">Inversión</div><div class="v">${pp(ti.central)} central</div><div class="d">Rango ${pp((ti.rango || [])[0])} a ${pp((ti.rango || [])[1])}</div></div></div>
+      <div class="rp-caja"><div class="et">Inversión</div>${ti.central == null
+        ? `<div class="v">Valoración pendiente</div><div class="d">${esc(ti.frase || '')}</div>`
+        : `<div class="v">${pp(ti.central)} central</div><div class="d">Rango ${pp((ti.rango || [])[0])} a ${pp((ti.rango || [])[1])}</div>`}</div></div>
     <div class="rp-sec">2 · Variables críticas</div>${variables}${tiempo}
-    ${ejes || promesas || dinero ? `<div class="rp-sec">3 · Dirección${d.quien ? ' · ' + esc(d.quien) : ''}</div>${ejes}${promesas}${dinero}` : ''}
-    <div class="rp-sec">4 · Valoración viva</div>${viva}
+    ${fund}
+    ${ejes || promesas || dinero ? `<div class="rp-sec">${++sec} · Dirección${d.quien ? ' · ' + esc(d.quien) : ''}</div>${ejes}${promesas}${dinero}` : ''}
+    <div class="rp-sec">${++sec} · Valoración viva</div>${viva}
     </div>
     <div class="botones" style="margin-top:16px">${boton(x.tesis[0].f, 'Tesis vigente (PDF)', 'boton--suave boton--peq')}
       <a class="boton boton--suave boton--peq" href="#/empresa/${encodeURIComponent(x.id)}">Todos los documentos</a></div></div>`;
