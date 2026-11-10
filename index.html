@@ -199,6 +199,110 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 .prosa blockquote{margin:24px 0;font:italic 300 clamp(24px,2.6vw,32px)/1.25 var(--titular);color:var(--pizarra)}
 .aviso-legal{margin-top:56px;padding-top:16px;border-top:1px solid var(--linea);font:12px/1.5 var(--sans);color:var(--gris);max-width:760px}
 .vacio{margin-top:26px;font-size:17px;color:var(--texto-2)}
+
+/* ---------- Salida privada (fase 3, 08/11/2026) ---------- */
+.sello-privado{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:99px;background:var(--texto);color:var(--papel);font:600 10px var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.opiniones .recuento{margin:8px 0 0;font:13px/1.5 var(--sans);color:var(--gris)}
+.opiniones .debate{margin:12px 0 0;max-width:760px;font:italic 400 19px/1.4 var(--titular);color:var(--texto)}
+.opiniones .debate--largo{font:400 16px/1.55 var(--serif);color:var(--texto-2)}
+.lados{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.lado h3{margin:0;padding-bottom:6px;border-bottom:2px solid;font:600 11px var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.lado--alcista h3{color:var(--verde-t);border-color:var(--verde-t)}
+.lado--bajista h3{color:var(--rojo-t);border-color:var(--rojo-t)}
+.argumento{padding:14px 0;border-bottom:1px solid var(--linea)}
+.argumento h4{margin:0;font:400 18px/1.3 var(--titular)}
+.argumento .tema{display:block;margin-bottom:2px;font:600 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+.argumento p{margin:6px 0 0;font-size:15px;line-height:1.45;color:var(--texto-2)}
+.argumento .fuentes{font:12px/1.6 var(--sans);color:var(--gris)}
+.chip{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:99px;background:#EEE9E0;color:var(--gris);font:600 10px/1.6 var(--sans);vertical-align:1px}
+.chip--pago{background:var(--ocre-suave);color:var(--ambar-t)}
+.chip--nuevo{background:var(--pizarra-suave);color:var(--pizarra-osc)}
+.discrepo{margin-top:22px;padding:12px 18px;background:#fff;border-left:3px solid var(--tinta);max-width:760px}
+.discrepo .mano{font-size:22px}
+.vigilancia{margin:8px 0 0;padding-left:20px;font-size:15px;color:var(--texto-2)}
+.marco-bib{display:block;width:100%;height:calc(100vh - 190px);min-height:480px;margin-top:18px;border:1px solid var(--linea);border-radius:8px;background:#fff}
+.radar-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-bottom:1px solid var(--linea)}
+.radar-item a.titulo{font:400 17px/1.35 var(--serif);color:var(--texto);text-decoration:none}
+.radar-item a.titulo:hover{text-decoration:underline}
+.radar-item .meta{font:12px/1.5 var(--sans);color:var(--gris)}
+.radar-item .tickers{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;align-items:flex-start}
+.radar-item .tickers a{font:600 11px var(--sans);text-decoration:none;padding:2px 8px;border:1px solid var(--pizarra-borde);border-radius:99px;background:#fff}
+@media (max-width:720px){ .radar-item{grid-template-columns:1fr} .radar-item .tickers{justify-content:flex-start} .marco-bib{height:calc(100vh - 230px)} }
+
+/* ---------- Repaso de tesis (09/11/2026; versión visual del 10/11/2026, a partir de las maquetas de Jose) ---------- */
+.rp-hoja{max-width:820px}
+.rp-titulo{margin:0;font:400 clamp(30px,3.4vw,40px)/1.1 var(--titular)}
+.rp-sub{margin:6px 0 0;font:15px/1.5 var(--sans);color:var(--gris)}
+.rp-tarjeta{margin-top:22px;background:var(--blanco);border:1px solid var(--linea);border-radius:14px;padding:22px 24px}
+.rp-sec{margin:26px 0 8px;font:500 13px var(--sans);color:var(--gris)}
+.rp-sec:first-child{margin-top:0}
+.rp-ag{display:flex;gap:16px;align-items:baseline;padding:11px 0;border-top:1px solid var(--linea);font:15px/1.4 var(--sans)}
+.rp-ag .f{flex:0 0 92px;color:var(--gris)}
+.rp-ag a{font-weight:600;color:var(--texto);text-decoration:none}
+a.rp-emp{display:block;padding:16px 0;border-top:1px solid var(--linea);text-decoration:none;color:var(--texto)}
+a.rp-emp:hover .n{text-decoration:underline}
+.rp-emp .l{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rp-emp .n{font:400 21px var(--titular)}
+.rp-emp .m{font:14px var(--sans);color:var(--gris)}
+.rp-emp .flecha{font:20px var(--sans);color:var(--gris)}
+.rp-salud{display:flex;gap:6px;margin-top:10px}
+.rp-salud i{flex:1;height:8px;border-radius:4px;background:#EEE9E0}
+.rp-salud i.intacta{background:#5E8F45} .rp-salud i.bajo_presion{background:#E3B04B} .rp-salud i.en_vigilancia{background:#A3A39B}
+.rp-pista{margin:18px 0 0;font:13px var(--sans);color:var(--gris)}
+.rp-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap}
+.rp-cab .fecha{font:15px var(--sans);color:var(--gris)}
+.rp-dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.rp-caja{background:var(--papel-2);border-radius:10px;padding:16px 18px}
+.rp-caja .et{font:14px var(--sans);color:var(--gris)}
+.rp-caja .v{margin-top:4px;font:600 24px/1.2 var(--sans)}
+.rp-caja .v.intacta{color:#3B6B2A} .rp-caja .v.bajo_presion{color:#9A6A12} .rp-caja .v.en_vigilancia{color:#5D5D55}
+.rp-caja .d{margin-top:6px;font:14px/1.4 var(--sans);color:var(--gris)}
+.rp-var{border-top:1px solid var(--linea)}
+.rp-var:last-of-type{border-bottom:1px solid var(--linea)}
+.rp-var summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:52px;padding:8px 0;font:19px/1.3 var(--serif)}
+.rp-var summary::-webkit-details-marker{display:none}
+.rp-term{display:block;margin-top:2px;font:12px/1.35 var(--sans);color:var(--gris)}
+.rp-var .det{padding:0 0 16px;font:14px/1.5 var(--sans);color:var(--texto-2)}
+.rp-var .det p{margin:6px 0}
+.rp-var .det table{min-width:0;font-size:13px}
+.rp-var .det td,.rp-var .det th{padding:8px 6px}
+.rp-rompe{margin-top:10px;padding:8px 12px;border-left:3px solid var(--rojo-t);background:var(--rojo-f);border-radius:4px}
+.rp-est{display:inline-block;padding:4px 14px;border-radius:99px;font:500 14px var(--sans);white-space:nowrap}
+.rp-est.intacta{background:var(--verde-f);color:#3B6B2A} .rp-est.bajo_presion{background:#F6E2B8;color:#7A5510} .rp-est.en_vigilancia{background:#E9E8E3;color:#5D5D55} .rp-est.nada{background:#F0ECE4;color:var(--gris)}
+.rp-tiempo summary{list-style:none;cursor:pointer;padding:12px 0 2px;font:14px var(--sans);color:var(--gris)}
+.rp-tiempo summary::-webkit-details-marker{display:none}
+.rp-tiempo summary b{font-weight:400;color:var(--pizarra)}
+.rp-hecho{padding:12px 0;border-bottom:1px solid var(--linea);font:14px/1.5 var(--sans)}
+.rp-hecho .t{font-weight:600;color:var(--texto)}
+.rp-efecto{margin-top:6px;padding-left:10px;border-left:3px solid #E3B04B;color:var(--texto-2)}
+.rp-efecto.confirma{border-color:#5E8F45} .rp-efecto.no_toca{border-color:var(--linea-2)}
+.rp-eje{display:flex;gap:10px;align-items:center;padding:5px 0;font:17px/1.4 var(--serif)}
+.rp-eje i{flex:none;width:11px;height:11px;border-radius:50%}
+.rp-eje i.bien{background:#5E8F45} .rp-eje i.regular{background:#E3B04B} .rp-eje i.mal{background:var(--rojo-t)}
+.rp-promesa{margin:8px 0 0;font:14px/1.45 var(--sans);color:var(--gris)}
+.rp-viva{background:var(--papel-2);border-radius:10px;padding:18px 20px}
+.rp-fila2{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rp-fila2 span{font:16px var(--serif)}
+.rp-fila2 strong{font:600 26px var(--sans);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rp-escala{position:relative;height:58px;margin:12px 8px 4px}
+.rp-escala .barra{position:absolute;left:0;right:0;top:38px;height:5px;border-radius:3px;background:var(--linea)}
+.rp-escala .m{position:absolute;top:0;transform:translateX(-50%);font:11px/1.3 var(--sans);color:var(--gris);text-align:center;white-space:nowrap}
+.rp-escala .m::after{content:"";display:block;width:1px;height:10px;margin:2px auto 0;background:var(--linea-2)}
+.rp-escala .hoy{position:absolute;top:30px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--texto-2);transform:translateX(-50%)}
+.rp-nota{margin:10px 0 0;font:13px/1.45 var(--sans);color:var(--gris)}
+.rp-ins{margin-top:14px;padding:14px 16px;background:var(--papel-2);border-radius:10px}
+.rp-ins .tit{font:600 14px var(--sans);color:var(--texto)}
+.rp-ins .res{margin:4px 0 0;font:15px/1.45 var(--serif);color:var(--texto-2)}
+.rp-barras{display:flex;align-items:flex-end;gap:8px;height:110px;margin-top:12px}
+.rp-barras div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font:11px/1.3 var(--sans);color:var(--gris)}
+.rp-barras b{display:block;width:70%;max-width:42px;border-radius:3px 3px 0 0;background:#B8C9AE}
+.rp-barras div.ultimo b{background:#5E8F45} .rp-barras div.ultimo{color:var(--texto);font-weight:600}
+.rp-barras div.neg b{background:#E2C2B9} .rp-barras div.neg.ultimo b{background:var(--rojo-t)}
+.rp-barras em{font-style:normal;margin-bottom:3px}
+.rp-ins details summary{list-style:none;cursor:pointer;margin-top:10px;font:13px var(--sans);color:var(--pizarra)}
+.rp-ins details summary::-webkit-details-marker{display:none}
+.rp-ins table{min-width:0;margin-top:8px;font-size:13px} .rp-ins td,.rp-ins th{padding:6px} .rp-ins td:not(:first-child),.rp-ins th:not(:first-child){text-align:right}
+@media (max-width:720px){ .rp-tarjeta{padding:18px 16px} .rp-ag .f{flex-basis:76px} .rp-escala .m small{display:none} }
 </style>
 </head>
 <body>
@@ -207,7 +311,8 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
   <form id="formulario" autocomplete="off">
     <div class="marca">Walker</div>
     <div class="rotulo" style="margin-top:10px">Investigar, decidir y acumular criterio</div>
-    <label for="clave">Contraseña de suscriptor</label>
+    <div class="sello-privado" hidden data-privado>Privado</div>
+    <label for="clave" id="etiqueta-clave">Contraseña de suscriptor</label>
     <input id="clave" name="clave" type="password" required autocomplete="current-password">
     <label class="recordar"><input id="recordar" type="checkbox" checked> Recordar en este dispositivo</label>
     <button class="boton" type="submit" id="entrar">Entrar</button>
@@ -220,6 +325,7 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
     <div>
       <div class="marca">Walker</div>
       <div class="lema">Investigar, decidir y acumular criterio</div>
+      <div class="sello-privado" hidden data-privado>Privado</div>
     </div>
     <div class="menu" id="menu"></div>
     <div class="pie">
@@ -235,14 +341,23 @@ td{padding:12px 8px;border-top:1px solid var(--linea)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = '3d56275bcdd4';
+const VERSION_WEB = '6208fe8e672b';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
   }
 }).catch(() => {});
 
-const ALMACEN = 'walker-llave-v1';
+// El generador la pone a true en la salida privada (--salida-privada). Las dos
+// webs comparten origen (herrvak-code.github.io): cada una guarda su llave con
+// un nombre distinto o se pisan.
+const SALIDA_PRIVADA = false;
+const ALMACEN = SALIDA_PRIVADA ? 'walker-privado-llave-v1' : 'walker-llave-v1';
+if (SALIDA_PRIVADA) {
+  document.title = 'Walker · Privado';
+  document.querySelectorAll('[data-privado]').forEach(n => { n.hidden = false; });
+  document.getElementById('etiqueta-clave').textContent = 'Tu contraseña';
+}
 let llave = null, llaveB64 = '', datos = null;
 const urls = {};
 
@@ -268,7 +383,11 @@ async function cargarDatos() {
 async function urlDe(id, tipo) {
   if (!urls[id]) {
     const r = await fetch('c/' + id + '.bin');
-    urls[id] = URL.createObjectURL(new Blob([await descifrar(await r.arrayBuffer())], { type: tipo }));
+    let claro = await descifrar(await r.arrayBuffer());
+    // Salida privada (08/11/2026): algunos ficheros van comprimidos con gzip (la biblioteca).
+    if ((datos.comprimidos || []).includes(id))
+      claro = await new Response(new Blob([claro]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    urls[id] = URL.createObjectURL(new Blob([claro], { type: tipo }));
   }
   return urls[id];
 }
@@ -316,7 +435,8 @@ document.getElementById('formulario').addEventListener('submit', async ev => {
     }
     arrancar();
   } catch (e) {
-    llave = null; error.textContent = 'Contraseña incorrecta. Está en el último post para suscriptores.';
+    llave = null; error.textContent = SALIDA_PRIVADA ? 'Contraseña incorrecta. Es la del llavero «walker-cuaderno».'
+      : 'Contraseña incorrecta. Está en el último post para suscriptores.';
   } finally { boton.disabled = false; boton.textContent = 'Entrar'; }
 });
 document.getElementById('salir').addEventListener('click', () => {
@@ -366,9 +486,10 @@ function foto(x) {
 
 // ---------- secciones ----------
 const MENU = [
-  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca']]],
+  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['repaso', 'Repaso', 'Qué ha pasado en cada tesis'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca']]],
   ['Mi cartera', [['cartera', 'Cartera', 'Pesos y movimientos']]],
-  ['Recursos', [['metodo', 'Método', 'Cómo trabajo'], ['recursos', 'Lecturas', 'Lo que merece la pena leer']]]
+  ['Recursos', [['metodo', 'Método', 'Cómo trabajo'], ['recursos', 'Lecturas', 'Lo que merece la pena leer']]],
+  ['Biblioteca', [['biblioteca', 'Biblioteca', 'Lo que dicen otros'], ['radar', 'Radar', 'Lo entrado esta semana']]]
 ];
 
 function pintar() {
@@ -380,21 +501,29 @@ function pintar() {
     const r = todas().find(o => o.x.id === partes[1]);
     marcada = r && r.origen === 'Watchlist' ? 'watchlist' : 'estrategias';
   }
+  if (seccion === 'otros') marcada = 'biblioteca';
   // Sin cartera en los datos (salida pública, 08/11/2026) no se enseña el grupo «Mi cartera».
-  const menu = MENU.map(([g, items]) => [g, items.filter(([id]) => id !== 'cartera' || datos.cartera)]).filter(([, items]) => items.length);
+  // El grupo Biblioteca solo existe con datos.privado (salida privada, 08/11/2026).
+  // Repaso (09/11/2026): solo si alguna empresa tiene repaso en esta salida.
+  const hay = id => id === 'cartera' ? datos.cartera : (id === 'biblioteca' || id === 'radar') ? datos.privado
+    : id === 'repaso' ? conRepaso().length : true;
+  const menu = MENU.map(([g, items]) => [g, items.filter(([id]) => hay(id))]).filter(([, items]) => items.length);
   document.getElementById('menu').innerHTML = menu.map(([g, items]) =>
     `<div class="grupo">${esc(g)}</div>` + items.map(([id, t, s]) => {
       const activa = id === marcada;
       return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
     }).join('')).join('');
-  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos };
+  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos, repaso };
+  if (datos.privado) Object.assign(vistas, { biblioteca, radar, otros });
   let html;
-  try { html = (vistas[seccion] || vision)(partes[1]); }
+  try { html = (vistas[seccion] || vision)(partes[1], partes.slice(1)); }
   catch (e) { console.error(e); html = '<h1>Esta sección no se ha podido mostrar</h1><p class="entradilla">Es un fallo del terminal, no de tu conexión. Vuelve a intentarlo más tarde.</p>'; }
   document.getElementById('contenido').innerHTML = html + avisoLegal();
   window.scrollTo(0, 0);
   document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', () => abrirPdf(b.dataset.pdf)));
   document.querySelectorAll('img[data-img]').forEach(async img => { img.src = await urlDe(img.dataset.img, 'image/jpeg'); });
+  const marco = document.querySelector('iframe[data-edicion]');
+  if (marco) cargarEdicion(marco);
 }
 
 function avisoLegal() {
@@ -488,7 +617,9 @@ function tablaEstrategia(e) {
   const con = filas.filter(x => x.retorno != null).sort((a, b) => b.retorno - a.retorno);
   const sin = filas.filter(x => x.retorno == null);
   const nombres = new Set(e.empresas.map(x => x.ticker));
-  const enlace = x => nombres.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(x.empresa)}</a>` : `<span class="nombre-empresa">${esc(x.empresa)}</span>`;
+  const enlace = x => nombres.has(x.ticker) ? `<a class="nombre-empresa" href="#/empresa/${encodeURIComponent(x.ticker)}">${esc(x.empresa)}</a>`
+    : x.bib && datos.privado ? `<a class="nombre-empresa" href="#/otros/${encodeURIComponent(x.bib)}">${esc(x.empresa)}</a>`
+    : `<span class="nombre-empresa">${esc(x.empresa)}</span>`;
   // Escala de las barras: de 0 a 20 %, o hasta la mayor rentabilidad si la supera.
   const tope = Math.max(0.20, ...con.map(x => x.retorno));
   const cuerpo = con.map(x => {
@@ -539,8 +670,11 @@ function empresa(id) {
         <h1 style="margin-top:10px">${esc(x.nombre)} <span class="ticker" style="font-size:14px">${esc(x.ticker)}</span></h1>
         <p class="entradilla" style="margin-top:6px">${esc(x.descripcion)}</p>
         ${x.titular ? `<p class="titular-tesis" style="font-size:21px;margin-top:12px">«${esc(x.titular)}»${x.subtitular ? ' ' + esc(x.subtitular) : ''}</p>` : ''}
-        <div style="margin-top:18px">${boton(x.tesis[0].f, 'Tesis vigente · ' + x.tesis[0].fecha + ' (PDF)')}</div></div>
+        <div class="botones" style="margin-top:18px">${boton(x.tesis[0].f, 'Tesis vigente · ' + x.tesis[0].fecha + ' (PDF)')}
+          ${x.repaso ? `<a class="boton boton--suave" href="#/repaso/${encodeURIComponent(x.id)}">Repaso de la tesis</a>` : ''}</div></div>
     </div>
+    ${x.discrepo ? `<div class="discrepo"><div class="mano">Dónde discrepo</div><div class="prosa">${x.discrepo}</div></div>` : ''}
+    ${datos.privado ? panelOpiniones(x.bib, false) : ''}
     ${complementos ? `<h2>Lecturas complementarias</h2>${complementos}` : ''}
     <h2>Trimestre a trimestre</h2>
     <p class="nota-gris" style="margin:0 0 4px">El más reciente arriba. La ficha previa fija antes del dato qué confirma la tesis y qué la pone en alerta; el seguimiento lo contrasta.</p>
@@ -593,6 +727,211 @@ function cartera() {
 
 function metodo() {
   return `<div class="rotulo">Método</div><div class="prosa">${datos.metodo || '<h1>En preparación</h1>'}</div>`;
+}
+
+// ---------- salida privada: biblioteca, radar y opiniones (fase 3, 08/11/2026) ----------
+const isoDmy = f => f.slice(8, 10) + '/' + f.slice(5, 7) + '/' + f.slice(0, 4);
+const fechaBib = f => !f ? 'sin fecha' : f.length === 10 ? isoDmy(f) : f.length === 7 ? f.slice(5) + '/' + f.slice(0, 4) : f;
+const enlaceExterno = (url, texto, clase) => /^https?:\/\//.test(url || '')
+  ? `<a${clase ? ` class="${clase}"` : ''} href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(texto)}</a>` : esc(texto);
+function fuenteBib(f) {
+  return enlaceExterno(f.url, f.autor) + ' · ' + (f.fecha_desconocida ? 'sin fecha' : fechaBib(f.fecha))
+    + (f.de_pago ? '<span class="chip chip--pago">de pago</span>' : '');
+}
+function argumento(a) {
+  return `<div class="argumento">${a.tema ? `<span class="tema">${esc(a.tema)}</span>` : ''}<h4>${esc(a.titulo)}</h4>
+    <p>${esc(a.resumen)}</p><p class="fuentes">${a.fuentes.map(fuenteBib).join('<br>')}</p></div>`;
+}
+// Panel «Qué dicen otros»: en la ficha, tres argumentos por lado; en su página, todos.
+function panelOpiniones(clave, completo) {
+  const b = clave && datos.privado.empresas[clave];
+  if (!b) return completo ? '' : '<h2>Qué dicen otros</h2><p class="vacio">La biblioteca todavía no tiene análisis de esta empresa.</p>';
+  const r = b.recuento, max = completo ? Infinity : 3;
+  const lado = (l, titulo) => {
+    const xs = b.argumentos.filter(a => a.lado === l);
+    return `<div class="lado lado--${l}"><h3>${titulo} · ${xs.length}</h3>${xs.slice(0, max).map(argumento).join('') || '<p class="vacio">Ninguno recogido.</p>'}
+      ${xs.length > max ? `<p class="nota-gris">y ${xs.length - max} más</p>` : ''}</div>`;
+  };
+  return `<section class="opiniones"><h2>Qué dicen otros</h2>
+    <p class="recuento">${r.alcistas} alcistas · ${r.bajistas} bajistas · ${r.documentos} documentos · último ${fechaBib(r.ultima)}${b.fecha_revision ? ' · revisado ' + fechaBib(b.fecha_revision) : ''}</p>
+    ${b.debate ? `<p class="debate${b.debate.length > 280 ? ' debate--largo' : ''}">${esc(b.debate)}</p>` : ''}
+    <div class="lados">${lado('alcista', 'Alcistas')}${lado('bajista', 'Bajistas')}</div>
+    ${completo && b.vigilancia.length ? `<h2>Qué vigilar</h2><ul class="vigilancia">${b.vigilancia.map(v => `<li>${esc(v)}</li>`).join('')}</ul>` : ''}
+    <div class="botones" style="margin-top:18px">${completo ? '' : `<a class="boton boton--suave" href="#/otros/${encodeURIComponent(clave)}">Ver todos los argumentos</a>`}
+      <a class="boton boton--suave" href="#/biblioteca/empresa/${encodeURIComponent(b.empresa_id)}">Abrir en la Biblioteca</a></div></section>`;
+}
+function otros(clave) {
+  const b = datos.privado.empresas[clave];
+  if (!b) return '<h1>Esa empresa no está en la biblioteca</h1>';
+  const ficha = todas().find(o => o.x.bib === clave);
+  const estr = [...new Set(b.estrategias.map(p => p.estrategia + (p.estado ? ' · ' + p.estado : '')))];
+  return `<a class="volver" href="${ficha ? '#/empresa/' + encodeURIComponent(ficha.x.id) : '#/biblioteca'}">← ${ficha ? 'Volver a la ficha' : 'Volver a la Biblioteca'}</a>
+    <div class="rotulo" style="margin-top:8px">Biblioteca · ${estr.map(esc).join(' · ')}</div>
+    <h1>${esc(b.nombre)} <span class="ticker" style="font-size:14px">${esc(clave)}</span></h1>
+    ${panelOpiniones(clave, true)}`;
+}
+function radar() {
+  const p = datos.privado, items = p.radar;
+  const fichas = new Map(todas().map(o => [o.x.bib, o.x.id]));
+  const chip = t => {
+    const ruta = fichas.has(t) ? '#/empresa/' + encodeURIComponent(fichas.get(t)) : p.empresas[t] ? '#/otros/' + encodeURIComponent(t) : null;
+    return ruta ? `<a href="${ruta}">${esc(t)}</a>` : `<span class="chip">${esc(t)}</span>`;
+  };
+  const dias = [...new Set(items.map(x => x.fecha))];
+  const cuerpo = dias.map(d => `<h2>${esc(isoDmy(d))}</h2>${items.filter(x => x.fecha === d).map(x => `<div class="radar-item">
+      <div>${enlaceExterno(x.url, x.titulo || '(sin título)', 'titulo')}
+        <div class="meta">${esc(x.fuente)} · ${esc(x.tipo)}${x.leido ? '' : '<span class="chip chip--nuevo">sin leer</span>'}${x.de_pago ? '<span class="chip chip--pago">de pago</span>' : ''}</div></div>
+      <div class="tickers">${x.tickers.map(chip).join('')}</div></div>`).join('')}`).join('');
+  return `<div class="rotulo">Biblioteca · radar</div><h1>Lo entrado esta semana</h1>
+    <p class="entradilla">${items.length} textos desde el ${esc(isoDmy(p.radar_desde))} sobre empresas que la biblioteca sigue. Sin vídeos ni resultados de búsqueda sin leer.${p.radar_recortado ? ` Se han quedado fuera ${p.radar_recortado} por el tope.` : ''}</p>
+    ${cuerpo || '<p class="vacio">Nada nuevo esta semana.</p>'}`;
+}
+function biblioteca(_, resto) {
+  const ruta = (resto || []).join('/');
+  return `<div class="rotulo">Biblioteca · edición del ${esc(fechaMercado(datos.privado.edicion.generado))}</div><h1>Lo que dicen otros</h1>
+    <p class="entradilla">La edición completa, con su buscador y sus filtros. La primera vez tarda unos segundos en abrir.</p>
+    <p class="nota-gris" id="estado-bib">Descargando y descifrando la biblioteca…</p>
+    <iframe class="marco-bib" title="Biblioteca Walker" data-edicion data-ruta="${esc(ruta)}" hidden></iframe>`;
+}
+// La edición se descarga solo al abrir esta pestaña. Va en un iframe del mismo
+// origen (blob:) para que conserve las preferencias que guarda en este navegador.
+async function cargarEdicion(marco) {
+  const estado = document.getElementById('estado-bib');
+  try {
+    const url = await urlDe(datos.privado.edicion.f, 'text/html');
+    marco.src = url + (marco.dataset.ruta ? '#/' + marco.dataset.ruta : '');
+    marco.hidden = false; estado.hidden = true;
+  } catch (e) {
+    console.error(e);
+    estado.textContent = 'No se ha podido abrir la biblioteca. Vuelve a intentarlo; si sigue, sal y vuelve a entrar.';
+  }
+}
+
+// ---------- Repaso de tesis (09/11/2026; versión visual del 10/11/2026) ----------
+// Una vista de la tesis vigente y sus seguimientos posteriores (contrato en
+// _terminal/REPASO.md). El precio, la rentabilidad de hoy y el precio para el
+// 15 % salen de la misma fila que la tabla de Estrategias: nunca se contradicen.
+// Jose (10/11/2026): sin contador ni variables descartadas, y un solo visto
+// bueno por ficha («validada»): lo da al confirmar las variables que le propongo.
+const RP_ESTADO = { intacta: 'Intacta', bajo_presion: 'Bajo presión', en_vigilancia: 'En vigilancia' };
+const RP_VEREDICTO = { confirma: 'Confirma', debilita: 'Debilita', no_toca: 'No toca' };
+const RP_CORTO = { div: 'Dividendos', qgv: 'QGV', alpha: 'Alpha' };
+const pp = v => (v === null || v === undefined) ? '—' : Number(v).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+function conRepaso() { return todas().filter(o => o.x.repaso); }
+function filaTabla(ticker) {
+  for (const e of datos.estrategias) { const f = (e.tabla || []).find(x => x.ticker === ticker); if (f) return f; }
+  return null;
+}
+function estrategiaDe(x) {
+  const e = datos.estrategias.find(e => e.empresas.includes(x));
+  return e ? RP_CORTO[e.id] : 'Watchlist';
+}
+const rpCuenta = (r, valor) => r.variables.filter(v => v.estado && v.estado.valor === valor).length;
+// Orden de la portada: proporción de variables bajo presión y, a igualdad, en vigilancia.
+const rpPresion = r => (rpCuenta(r, 'bajo_presion') + rpCuenta(r, 'en_vigilancia') / 10) / r.variables.length;
+function rpEstado(est) {
+  if (!est) return '<span class="rp-est nada">Sin estado</span>';
+  return `<span class="rp-est ${esc(est.valor)}">${esc(RP_ESTADO[est.valor] || est.valor)}</span>`;
+}
+function repaso(id) { return id ? repasoEmpresa(id) : repasoPortada(); }
+
+function repasoPortada() {
+  const lista = conRepaso().map(o => o.x).sort((a, b) => rpPresion(b.repaso) - rpPresion(a.repaso) || a.nombre.localeCompare(b.nombre));
+  const nvar = lista.reduce((n, x) => n + x.repaso.variables.length, 0);
+  const npres = lista.reduce((n, x) => n + rpCuenta(x.repaso, 'bajo_presion'), 0);
+  const hace60 = new Date(Date.now() - 60 * 864e5).toISOString().slice(0, 10);
+  const nhechos = lista.reduce((n, x) => n + (x.repaso.linea_tiempo || []).filter(h => h.fecha >= hace60).length, 0);
+  // Solo el próximo hecho de cada empresa; el resto, en su ficha.
+  const porFecha = (a, b) => String(a.fecha).localeCompare(String(b.fecha));
+  const agenda = lista.map(x => ({ h: [...(x.repaso.proximos_hechos || [])].sort(porFecha)[0], x }))
+    .filter(o => o.h).map(o => ({ ...o.h, x: o.x })).sort(porFecha);
+  const filas = lista.map(x => {
+    const r = x.repaso, t = filaTabla(x.ticker), b = rpCuenta(r, 'bajo_presion'), v = rpCuenta(r, 'en_vigilancia');
+    const meta = [t && t.retorno != null ? pct(t.retorno) : null, b ? b + ' bajo presión' : 'sin presión', v ? v + ' en vigilancia' : null, r.desactualizado ? 'desactualizado' : null].filter(Boolean).join(' · ');
+    const barras = r.variables.map(v => `<i class="${v.estado ? esc(v.estado.valor) : ''}" title="${esc(v.nombre)}"></i>`).join('');
+    return `<a class="rp-emp" href="#/repaso/${encodeURIComponent(x.id)}"><div class="l"><span><span class="n">${esc(x.nombre)}</span> <span class="m">· ${esc(meta)}</span></span><span class="flecha" aria-hidden="true">›</span></div>
+      <div class="rp-salud">${barras}</div></a>`;
+  }).join('');
+  return `<div class="rp-hoja"><div class="rp-tarjeta">
+    <h1 class="rp-titulo">Repaso de tesis</h1>
+    <p class="rp-sub">${lista.length} tesis · ${npres} de ${nvar} variables bajo presión · ${nhechos} ${nhechos === 1 ? 'hecho' : 'hechos'} en 60 días</p>
+    ${agenda.length ? `<div class="rp-sec">Próximos hechos</div>${agenda.map(h => `<div class="rp-ag"><span class="f">${esc(h.etiqueta)}</span>
+      <span><a href="#/repaso/${encodeURIComponent(h.x.id)}">${esc(h.x.ticker)}</a> · ${esc(h.hecho)}</span></div>`).join('')}` : ''}
+    <div class="rp-sec" style="margin-top:30px">Por empresa</div>${filas}
+    <p class="rp-pista">Toca una empresa para abrir su ficha.</p></div></div>`;
+}
+
+function repasoEmpresa(id) {
+  const o = conRepaso().find(o => o.x.id === id);
+  if (!o) return '<h1>Esa empresa no tiene repaso</h1><p class="entradilla"><a href="#/repaso">Volver al repaso</a></p>';
+  const x = o.x, r = x.repaso, t = filaTabla(x.ticker), tn = r.tesis_negocio || {}, ti = r.tesis_inversion || {};
+  const nombreVar = vid => (r.variables.find(v => v.id === vid) || {}).nombre || vid;
+  const variables = r.variables.map(v => `<details class="rp-var"><summary><span>${esc(v.nombre)}${v.termino ? `<small class="rp-term">(${esc(v.termino)})</small>` : ''}</span>${rpEstado(v.estado)}</summary>
+    <div class="det">${v.pregunta ? `<p><strong>${esc(v.pregunta)}</strong></p>` : ''}<p>${esc(v.por_que)}</p>
+      ${v.ultimo_dato ? `<p><strong>Último dato.</strong> ${esc(v.ultimo_dato)}</p>` : ''}
+      ${(v.indicadores || []).length ? `<div class="tabla-caja"><table><thead><tr><th>Qué mirar</th><th>Cuándo</th><th>Peor</th><th>Mejor</th></tr></thead>
+        <tbody>${v.indicadores.map(i => `<tr><td>${esc(i.que)}${i.termino ? `<small class="rp-term">(${esc(i.termino)})</small>` : ''}</td><td>${esc(i.cuando)}</td><td>${esc(i.conservador)}</td><td>${esc(i.favorable)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      ${v.rompe ? `<div class="rp-rompe"><strong>Lo que la rompería.</strong> ${esc(v.rompe)}</div>` : ''}</div></details>`).join('');
+  const proximo = (r.proximos_hechos || [])[0];
+  const hechos = (r.linea_tiempo || []).map(h => `<div class="rp-hecho"><div class="t">${esc(isoDmy(h.fecha))} · ${esc(h.hecho)}</div>
+      ${h.efectos.map(e => `<div class="rp-efecto ${esc(e.veredicto)}">${esc(RP_VEREDICTO[e.veredicto])} · ${esc(nombreVar(e.variable))}: ${esc(e.lineas)}</div>`).join('')}</div>`).join('');
+  const tiempo = `<details class="rp-tiempo"><summary>${proximo ? 'Próximo hecho: ' + esc(proximo.hecho) + ', ' + esc(proximo.etiqueta.toLowerCase()) + ' · ' : ''}<b>ver línea de tiempo ›</b></summary>
+    ${(r.proximos_hechos || []).length > 1 ? `<div class="rp-sec" style="margin-top:12px">Próximos hechos</div>${r.proximos_hechos.map(h => `<div class="rp-ag"><span class="f">${esc(h.etiqueta)}</span><span>${esc(h.hecho)}</span></div>`).join('')}` : ''}
+    <div class="rp-sec" style="margin-top:16px">Lo que ha pasado</div>${hechos || '<p class="rp-nota" style="margin-top:0">Nada registrado todavía después de la tesis.</p>'}</details>`;
+  const d = r.direccion || {};
+  const ejes = (d.ejes || []).map(e => `<div class="rp-eje" title="${esc(e.eje + '. ' + e.texto)}"><i class="${esc(e.estado)}"></i><span>${esc(e.corto || e.texto)}</span></div>`).join('');
+  // Hasta dos promesas a la vista; si hay más, se dice cuántas quedan (Jose, 10/11/2026: «(y 1 más)» no se entendía).
+  const ps = d.promesas_abiertas || [];
+  const promesas = ps.slice(0, 2).map(p => `<p class="rp-promesa">Promesa abierta: ${esc(p.promesa)} · ${esc(p.se_resuelve)}</p>`).join('')
+    + (ps.length > 2 ? `<p class="rp-promesa">Y ${ps.length - 2} promesa${ps.length - 2 > 1 ? 's' : ''} más en la tesis.</p>` : '');
+  // Quién pone dinero (Jose, 10/11/2026): insiders siempre, con el neto por año en barras;
+  // grandes gestores solo si pasan los filtros de REPASO.md. Contexto, nunca evidencia.
+  const ci = d.compras_insiders, gs = d.gestores || [];
+  let insiders = '';
+  if (ci && (ci.por_ano || []).length) {
+    const max = Math.max(...ci.por_ano.map(a => Math.abs(a.neto))) || 1;
+    const ult = ci.por_ano[ci.por_ano.length - 1].ano;
+    const n = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toLocaleString('es-ES');
+    insiders = `<div class="rp-ins"><div class="tit">${esc(ci.titulo || 'Compras de insiders')}</div><p class="res">${esc(ci.resumen)}</p>
+      <div class="rp-barras" role="img" aria-label="Compras menos ventas de insiders por año">${ci.por_ano.map(a => `<div class="${a.ano === ult ? 'ultimo' : ''}${a.neto < 0 ? ' neg' : ''}"><em>${n(a.neto)}</em><b style="height:${Math.max(2, Math.abs(a.neto) / max * 70)}px"></b>${a.ano}</div>`).join('')}</div>
+      <p class="rp-nota" style="margin-top:6px">Compras menos ventas declaradas, en ${esc(ci.unidad || 'millones')}.${ci.ultima ? ' Última: ' + esc(ci.ultima) : ''}</p>
+      <details><summary>ver detalle ›</summary><div class="tabla-caja"><table><thead><tr><th>Año</th><th>Compras</th><th>Ventas</th><th>Neto</th>${ci.por_ano.some(a => a.en_bolsa != null) ? '<th>En bolsa</th>' : ''}</tr></thead>
+        <tbody>${ci.por_ano.map(a => `<tr><td>${a.ano}</td><td>${a.compras.toLocaleString('es-ES')}</td><td>${a.ventas.toLocaleString('es-ES')}</td><td>${n(a.neto)}</td>${a.en_bolsa != null ? `<td>${a.en_bolsa}</td>` : ''}</tr>`).join('')}</tbody></table></div>
+        ${ci.precedente ? `<p class="rp-nota">${esc(ci.precedente)}</p>` : ''}${ci.cautela ? `<p class="rp-nota">${esc(ci.cautela)}</p>` : ''}${ci.fuente ? `<p class="rp-nota">Fuente: ${esc(ci.fuente)}</p>` : ''}</details></div>`;
+  }
+  const gestores = gs.map(g => `<div class="rp-ins"><div class="tit">${esc(g.nombre)}</div><p class="res">${esc(g.que)}</p>
+      <p class="rp-nota">Dato a ${esc(isoDmy(g.fecha_dato))}. ${esc(g.retraso || '')}${g.fuente ? ' Fuente: ' + esc(g.fuente) + '.' : ''}</p></div>`).join('');
+  const dinero = insiders || gestores ? `<div class="rp-sec" style="margin-top:18px">Quién pone dinero</div>${insiders}${gestores}` : '';
+  // Valoración viva: el precio de hoy frente al de la tesis y al precio para el 15 %.
+  let viva = '<p class="rp-nota">Sin rentabilidad publicada para el precio de hoy.</p>';
+  if (t && t.precio != null) {
+    // La vara de cada estrategia: Dividendos pide un 8 % mínimo y un 10 % objetivo; las demás, un 15 %.
+    const div = datos.estrategias.some(e => e.id === 'div' && e.empresas.includes(x));
+    const varas = div ? [[t.precio_8, '8 %'], [t.precio_10, '10 %']] : [[t.precio_15, '15 %']];
+    const marcas = [...varas, [ti.precio_tesis, 'tesis']].filter(([v]) => v != null);
+    const vals = [t.precio, ...marcas.map(([v]) => v)], lo = Math.min(...vals) * 0.9, hi = Math.max(...vals) * 1.08;
+    const pos = v => ((v - lo) / (hi - lo) * 100).toFixed(1);
+    viva = `<div class="rp-viva"><div class="rp-fila2"><span>Precio de hoy</span><strong>${precio(t.precio)} ${esc(t.moneda || '')}</strong></div>
+      <div class="rp-escala" role="img" aria-label="Precio de hoy frente al de la tesis y al precio para el 15 %"><div class="barra"></div>
+        ${marcas.map(([v, et]) => `<div class="m" style="left:${pos(v)}%">${et}<small><br>${precio(v)}</small></div>`).join('')}
+        <div class="hoy" style="left:${pos(t.precio)}%"></div></div>
+      <div class="rp-fila2"><span>Caso central a ese precio</span><strong>${pct(t.retorno)}</strong></div>
+      <p class="rp-nota">${div ? `El central da un 8 % por debajo de ${precio(t.precio_8)} ${esc(t.moneda || '')} y un 10 % por debajo de ${precio(t.precio_10)} ${esc(t.moneda || '')}.` : `Por debajo de ${precio(t.precio_15)} ${esc(t.moneda || '')} el central daría un 15 %.`} Precio a ${esc(fechaMercado(t.fecha_precio))}${!t.actualizado ? ' (dato guardado)' : ''}.</p></div>`;
+  }
+  return `<a class="volver" href="#/repaso">← Repaso</a>
+    <div class="rp-hoja"><div class="rp-tarjeta">
+    <div class="rp-cab"><h1 class="rp-titulo">${esc(x.nombre)} · ${esc(x.ticker)} · ${esc(estrategiaDe(x))}</h1><span class="fecha">Tesis ${esc(isoDmy(r.tesis.fecha))}</span></div>
+    ${!r.validada ? '<p class="rp-nota" style="margin-top:12px">Pendiente de tu visto bueno.</p>' : ''}
+    ${r.desactualizado ? '<div class="rp-rompe" style="margin-top:14px">Este repaso no recoge todavía el último seguimiento publicado.</div>' : ''}
+    <div class="rp-sec">1 · Las dos tesis</div>
+    <div class="rp-dos"><div class="rp-caja"><div class="et">Negocio</div><div class="v ${tn.estado ? esc(tn.estado.valor) : ''}">${tn.estado ? esc(RP_ESTADO[tn.estado.valor]) : '—'}</div><div class="d">${esc(tn.datos || '')}</div></div>
+      <div class="rp-caja"><div class="et">Inversión</div><div class="v">${pp(ti.central)} central</div><div class="d">Rango ${pp((ti.rango || [])[0])} a ${pp((ti.rango || [])[1])}</div></div></div>
+    <div class="rp-sec">2 · Variables críticas</div>${variables}${tiempo}
+    ${ejes || promesas || dinero ? `<div class="rp-sec">3 · Dirección${d.quien ? ' · ' + esc(d.quien) : ''}</div>${ejes}${promesas}${dinero}` : ''}
+    <div class="rp-sec">4 · Valoración viva</div>${viva}
+    </div>
+    <div class="botones" style="margin-top:16px">${boton(x.tesis[0].f, 'Tesis vigente (PDF)', 'boton--suave boton--peq')}
+      <a class="boton boton--suave boton--peq" href="#/empresa/${encodeURIComponent(x.id)}">Todos los documentos</a></div></div>`;
 }
 
 function recursos() {
