@@ -364,7 +364,7 @@ a.rp-fila:hover{background:var(--papel-2)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = 'd6261b8c2af5';
+const VERSION_WEB = 'a95f6cecab2a';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -509,7 +509,7 @@ function foto(x) {
 
 // ---------- secciones ----------
 const MENU = [
-  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['repaso', 'Repaso', 'Qué ha pasado en cada tesis'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca']]],
+  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['repaso', 'Repaso', 'Qué ha pasado en cada tesis'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca'], ['industrias', 'Industrias', 'Cómo funciona cada sector']]],
   ['Mi cartera', [['cartera', 'Cartera', 'Pesos y movimientos']]],
   ['Recursos', [['metodo', 'Método', 'Cómo trabajo'], ['recursos', 'Lecturas', 'Lo que merece la pena leer']]],
   ['Biblioteca', [['biblioteca', 'Biblioteca', 'Lo que dicen otros'], ['radar', 'Radar', 'Lo entrado esta semana']]]
@@ -536,7 +536,7 @@ function pintar() {
       const activa = id === marcada;
       return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
     }).join('')).join('');
-  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos, repaso };
+  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos, repaso, industrias };
   if (datos.privado) Object.assign(vistas, { biblioteca, radar, otros });
   let html;
   try { html = (vistas[seccion] || vision)(partes[1], partes.slice(1)); }
@@ -695,7 +695,8 @@ function empresa(id) {
         <p class="entradilla" style="margin-top:6px">${esc(x.descripcion)}</p>
         ${x.titular ? `<p class="titular-tesis" style="font-size:21px;margin-top:12px">«${esc(x.titular)}»${x.subtitular ? ' ' + esc(x.subtitular) : ''}</p>` : ''}
         <div class="botones" style="margin-top:18px">${boton(x.tesis[0].f, 'Tesis vigente · ' + x.tesis[0].fecha + ' (PDF)')}
-          ${x.repaso ? `<a class="boton boton--suave" href="#/repaso/${encodeURIComponent(x.id)}">Repaso de la tesis</a>` : ''}</div></div>
+          ${x.repaso ? `<a class="boton boton--suave" href="#/repaso/${encodeURIComponent(x.id)}">Repaso de la tesis</a>` : ''}
+          ${industriasDe(x).map(i => `<a class="boton boton--suave" href="#/industrias/${encodeURIComponent(i.id)}" title="${esc(i.nombre)}">Informe de su sector</a>`).join('')}</div></div>
     </div>
     ${x.discrepo ? `<div class="discrepo"><div class="mano">Dónde discrepo</div><div class="prosa">${x.discrepo}</div></div>` : ''}
     ${datos.privado ? panelOpiniones(x.bib, false) : ''}
@@ -704,6 +705,60 @@ function empresa(id) {
     <p class="nota-gris" style="margin:0 0 4px">El más reciente arriba. La ficha previa fija antes del dato qué confirma la tesis y qué la pone en alerta; el seguimiento lo contrasta.</p>
     ${trimestres}
     ${anteriores.length ? `<h2>Tesis anteriores</h2><div class="botones">${anteriores.map(t => boton(t.f, 'Tesis · ' + t.fecha, 'boton--suave')).join('')}</div>` : ''}`;
+}
+
+// ---------- industrias (Jose, 15/11/2026) ----------
+// Un informe de sector toca a varias empresas: tiene pestaña propia y cada ficha
+// de su lista enlaza a él. En la salida pública el generador ya ha dejado solo
+// las industrias de publico.txt y, en cada una, solo las empresas con ficha pública.
+function industriasDe(x) {
+  return (datos.industrias || []).filter(i => i.empresas.includes(String(x.ticker).toUpperCase()));
+}
+function tarjetaIndustria(i) {
+  const fichas = new Map(todas().map(o => [String(o.x.ticker).toUpperCase(), o.x]));
+  const empresas = i.empresas.map(t => fichas.has(t)
+    ? `<a href="#/empresa/${encodeURIComponent(fichas.get(t).id)}">${esc(fichas.get(t).nombre)}</a>` : esc(t)).join(' · ');
+  const [vigente, ...anteriores] = i.informes;
+  return `<article class="tarjeta" id="industria-${esc(i.id)}">
+    <div class="cuerpo">
+      <span class="etiqueta">Informe de sector</span>
+      <h3>${esc(i.nombre)}</h3>
+      <p class="desc">${esc(i.descripcion)}</p>
+      <div class="acciones">
+        <div class="ultimo"><b>Parte viva al ${esc(i.fecha_parte_viva)} · </b>se reescribe cada trimestre: cuotas de mercado, en qué punto del ciclo está el sector, dónde está hoy el cuello de botella y la regulación en marcha. La parte estable (cómo funciona el negocio, su historia y sus ciclos pasados) se revisa una vez al año.</div>
+        ${empresas ? `<div class="ultimo"><b>Empresas del terminal · </b>${empresas}</div>` : ''}
+        <div class="botones">${boton(vigente.f, 'Informe · ' + vigente.fecha + ' (PDF)', 'boton--peq')}
+          ${anteriores.map(a => boton(a.f, 'Anterior · ' + a.fecha, 'boton--suave boton--peq')).join('')}</div>
+      </div>
+    </div></article>`;
+}
+function industrias(id) {
+  const lista = datos.industrias || [];
+  const una = id && lista.find(i => i.id === id);
+  const cabecera = `<div class="rotulo">Industrias · informes de sector</div><h1>Cómo funciona cada sector</h1>
+    <p class="entradilla">Antes de entrar en una empresa, el sector entero: cómo gana dinero, quién se queda el beneficio, qué lo frena y qué lo gobierna. No da precio objetivo ni dice qué comprar; eso está en las tesis de cada empresa.</p>`;
+  if (una) return `<a class="volver" href="#/industrias">← Todas las industrias</a>${cabecera}<div class="rejilla">${tarjetaIndustria(una)}</div>`;
+  const propios = lista.length ? `<div class="rejilla">${lista.map(tarjetaIndustria).join('')}</div>`
+    : '<p class="vacio">Todavía no hay ningún informe de sector publicado.</p>';
+  return cabecera + propios + bloqueTerceros();
+}
+// Estudios de terceros (Jose, 15/11/2026): solo existen en la salida privada; el
+// generador nunca los mete en la pública y comprobar_publico falla si aparecen.
+function bloqueTerceros() {
+  const lista = datos.terceros || [];
+  if (!SALIDA_PRIVADA || !lista.length) return '';
+  return `<h2 style="margin-top:36px">Estudios de terceros</h2>
+    <p class="nota-gris" style="margin:0 0 12px">Estudios de sector hechos por otros. No están verificados por Walker: sirven de mapa y para localizar las fuentes primarias que citan.</p>
+    <div class="rejilla">${lista.map(t => `<article class="tarjeta" id="tercero-${esc(t.id)}">
+    <div class="cuerpo">
+      <span class="etiqueta">Estudio de terceros · ${esc(t.autor)}</span>
+      <h3>${esc(t.titulo)}</h3>
+      <p class="desc">${esc(t.descripcion)}</p>
+      <div class="acciones">
+        <div class="ultimo"><b>Datos a ${esc(t.fecha_datos)} · </b>${esc(t.autor)}. Lectura de fuera, no es un informe de Walker.</div>
+        <div class="botones">${boton(t.f, 'Estudio (PDF)', 'boton--peq')}</div>
+      </div>
+    </div></article>`).join('')}</div>`;
 }
 
 const pct = (v, d = 1) => (v === null || v === undefined || v === '') ? '—' : (v * 100).toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }) + ' %';
