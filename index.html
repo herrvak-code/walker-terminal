@@ -363,6 +363,8 @@ a.rp-fila:hover{background:var(--papel-2)}
 .ind-tarjeta .sello svg{width:16px;height:16px}
 .ind-tarjeta .cuerpo{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .ind-tarjeta h3{margin:0;font:400 23px/1.15 var(--titular)}
+.ind-tarjeta .ind-gics{margin:-2px 0 0;font:12px/1.35 var(--sans);color:var(--gris)} .ind-tarjeta .ind-gics b{font-weight:600;color:var(--texto-2)}
+.ind-heroe .ind-cubre{margin:10px 0 0;font:13.5px/1.45 var(--sans);color:rgba(255,255,255,.85);max-width:820px}
 .ind-tarjeta .tit{margin:0;font:italic 400 15px/1.3 var(--titular);color:var(--texto-2)}
 .ind-cifras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:4px}
 .ind-cifras div{background:var(--papel);border-radius:8px;padding:8px 8px 7px}
@@ -410,6 +412,47 @@ a.rp-fila:hover{background:var(--papel-2)}
 .ind-conex li .ind-chip{flex:none;margin-top:1px}
 .marco-ficha{display:block;width:100%;border:1px solid var(--linea);border-radius:12px;background:#fff;margin-top:14px;min-height:400px}
 @media (max-width:720px){.ind-conex{grid-template-columns:1fr} .ind-heroe{padding:20px 18px} .ind-cifras b{font-size:15px} .ind-rejilla{grid-template-columns:1fr}}
+/* ---------- Mapa del mercado (Jose, 16/11/2026): las 74 industrias GICS, portada de Industrias (solo privada) ---------- */
+.mm-vistas{display:inline-flex;margin-top:18px;padding:3px;border:1px solid var(--linea-2);border-radius:99px;background:#fff}
+.mm-vistas a{min-height:36px;display:inline-flex;align-items:center;padding:0 16px;border-radius:99px;font:600 13px var(--sans);color:var(--texto-2);text-decoration:none}
+.mm-vistas a[aria-current=page]{background:var(--texto);color:#fff}
+.mm-leyenda{display:flex;flex-wrap:wrap;gap:8px 16px;margin:16px 0 0;font:12.5px var(--sans);color:var(--texto-2)}
+.mm-leyenda span{display:inline-flex;align-items:center;gap:7px}
+.mm-leyenda i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.mm-leyenda b{font-weight:600;color:var(--texto)}
+.mm-leyenda .punto i{width:9px;height:9px;border-radius:50%;background:var(--texto);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--texto)}
+.mm-cuerpo{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;margin-top:14px}
+.mm-lienzo{position:relative;width:100%;background:var(--papel-2);border:1px solid var(--linea);border-radius:10px;overflow:hidden}
+.mm-sector{position:absolute;box-sizing:border-box}
+.mm-sector>.t{position:absolute;left:4px;right:4px;top:2px;font:700 10px/16px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gris);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-caja{position:absolute;box-sizing:border-box;border:0;border-radius:3px;padding:5px 6px;margin:0;text-align:left;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;gap:1px;font-family:var(--sans);box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);transition:filter .12s}
+.mm-caja:hover{filter:brightness(1.07)}
+.mm-caja.on{box-shadow:inset 0 0 0 3px var(--texto),0 0 0 1px #fff;z-index:2}
+.mm-caja .n{font:600 11.5px/1.2 var(--sans);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;hyphens:auto;-webkit-hyphens:auto}
+.mm-caja.con-punto{padding-right:16px}
+.mm-caja.grande .n{font-size:14px}
+.mm-caja .p{font:500 11px/1.2 var(--sans);opacity:.85;font-variant-numeric:tabular-nums}
+.mm-caja .pt{position:absolute;right:5px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--texto);box-shadow:0 0 0 2px #fff}
+.mm-panel{position:sticky;top:16px;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:18px 18px 20px;font:14px/1.5 var(--sans);color:var(--texto-2)}
+.mm-panel h3{margin:6px 0 0;font:400 25px/1.15 var(--titular);color:var(--texto)}
+.mm-panel .en{margin-top:3px;font:12px var(--sans);color:var(--gris)}
+.mm-panel .estado-ficha{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:3px 10px;border-radius:99px;font:600 12px var(--sans)}
+.mm-panel .estado-ficha i{width:9px;height:9px;border-radius:50%}
+.mm-panel .bloque{margin-top:16px;padding-top:12px;border-top:1px solid #EFE8DB}
+.mm-panel .bloque>.rotulo{margin-bottom:6px}
+.mm-panel .peso b{font:600 26px/1.1 var(--sans);color:var(--texto);font-variant-numeric:tabular-nums}
+.mm-panel .chips{display:flex;flex-wrap:wrap;gap:6px}
+.mm-panel .chips a,.mm-panel .chips span{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border-radius:99px;font:600 12px var(--sans);text-decoration:none;border:1px solid var(--pizarra-borde);background:var(--pizarra-suave);color:var(--pizarra-osc)}
+.mm-panel .chips span{background:var(--papel);border-color:var(--linea);color:var(--texto-2);font-weight:500}
+.mm-panel .chips small{font-weight:400;color:var(--gris);margin-left:5px}
+.mm-panel ul.subs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.mm-panel ul.subs b{display:block;color:var(--texto);font-weight:600}
+.mm-panel .botones{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.mm-panel .boton[aria-disabled=true]{background:var(--papel-2);color:var(--gris);border:1px solid var(--linea);cursor:default}
+.mm-panel .cuenta{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;margin-top:12px}
+.mm-panel .cuenta i{width:14px;height:14px;border-radius:3px;display:inline-block;margin-top:3px}
+.mm-pie{margin-top:12px;font:12px/1.5 var(--sans);color:var(--gris)}
+@media (max-width:900px){.mm-cuerpo{grid-template-columns:1fr} .mm-panel{position:static}}
 </style>
 </head>
 <body>
@@ -448,7 +491,7 @@ a.rp-fila:hover{background:var(--papel-2)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = 'f73bc12dc470';
+const VERSION_WEB = 'b12831d8101f';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -617,7 +660,10 @@ function pintar() {
   // El grupo Biblioteca solo existe con datos.privado (salida privada, 08/11/2026).
   // Repaso (09/11/2026): solo si alguna empresa tiene repaso en esta salida.
   const hay = id => id === 'cartera' ? datos.cartera : (id === 'biblioteca' || id === 'radar') ? datos.privado
-    : id === 'repaso' ? conRepaso().length : true;
+    : id === 'repaso' ? conRepaso().length
+    // Pestañas vacías (17/11/2026, Jose: la pública solo lleva Visión, estrategias y repaso): no se enseñan.
+    : id === 'metodo' ? datos.metodo : id === 'recursos' ? (datos.lecturas || []).length
+    : id === 'watchlist' ? (datos.watchlist || []).length : id === 'industrias' ? (datos.industrias || []).length : true;
   const menu = MENU.map(([g, items]) => [g, items.filter(([id]) => hay(id))]).filter(([, items]) => items.length);
   document.getElementById('menu').innerHTML = menu.map(([g, items]) =>
     `<div class="grupo">${esc(g)}</div>` + items.map(([id, t, s]) => {
@@ -806,8 +852,10 @@ function empresa(id) {
 function industriasDe(x) {
   return (datos.industrias || []).filter(i => i.empresas.includes(String(x.ticker).toUpperCase()));
 }
-const IND_COLOR = { 'Tecnología': '#2E5F73', 'Consumo': '#8E6A2F', 'Materias primas': '#9A5B2E', 'Salud': '#3F7A5A',
-  'Transporte': '#2E4D73', 'Energía': '#A0422F', 'Financieras': '#5B4E8C', 'Industria': '#55606E', 'Inmobiliario': '#7A5C3E' };
+// Desde el 16/11/2026 las familias son los 11 sectores GICS (Jose: «sí, cámbialo a los sectores oficiales»).
+const IND_COLOR = { 'Tecnologías de la información': '#2E5F73', 'Servicios de comunicación': '#3D6E8F', 'Consumo discrecional': '#A8486A',
+  'Consumo básico': '#8E6A2F', 'Salud': '#3F7A5A', 'Financiero': '#5B4E8C', 'Industria': '#55606E', 'Energía': '#A0422F',
+  'Materiales': '#9A5B2E', 'Servicios públicos (utilities)': '#64752C', 'Inmobiliario': '#7A5C3E' };
 const IND_RESERVA = ['#6B4E7A', '#3E6E73', '#7A6A2E', '#4E5A7A', '#7A3E52'];
 function familias() {
   const vistas = [];
@@ -821,14 +869,28 @@ function colorFamilia(f) {
 }
 // Pictogramas de línea (24×24), uno por familia; el resto, un nodo genérico.
 const IND_ICONO = {
-  'Tecnología': '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
-  'Consumo': '<path d="M3 9h18l-2 11H5L3 9z"/><path d="M8 9l4-6 4 6M9 13v4M15 13v4M12 13v4"/>',
-  'Materias primas': '<path d="M3 19l3-7h12l3 7H3z"/><path d="M7.5 12l2-5h5l2 5"/>',
+  'Tecnologías de la información': '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+  'Servicios de comunicación': '<path d="M4 4h16v11H10l-5 4v-4H4V4z"/><path d="M8 9h8M8 12h5"/>',
+  'Consumo discrecional': '<path d="M5 8h14l-1 13H6L5 8z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+  'Consumo básico': '<path d="M3 9h18l-2 11H5L3 9z"/><path d="M8 9l4-6 4 6M9 13v4M15 13v4M12 13v4"/>',
+  'Materiales': '<path d="M3 19l3-7h12l3 7H3z"/><path d="M7.5 12l2-5h5l2 5"/>',
   'Salud': '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3z"/>',
-  'Transporte': '<path d="M4 16v-4l2.5-5h11L20 12v4H4z"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M6 12h12"/>',
+  'Industria': '<circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
   'Energía': '<path d="M13 2L5 14h6l-1 8 8-12h-6l1-8z"/>',
-  'Financieras': '<path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+  'Financiero': '<path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+  'Servicios públicos (utilities)': '<path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0V7zM12 17v5"/>',
+  'Inmobiliario': '<path d="M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6"/>',
 };
+// Qué industrias GICS cubre la ficha y qué otros sectores toca (solo en la privada,
+// que lleva el mapa del mercado). Arregla lo que el sector solo no dice: Movilidad
+// es «Industria · Transporte terrestre» y Materias primas cíclicas «también Energía».
+function cubreTxt(i) {
+  const g = i.gics || [];
+  // Si la industria GICS se llama como la ficha (Software, Semiconductores…), no aporta nada.
+  if (g.length === 1) return g[0].nombre.toLowerCase().startsWith(i.nombre.toLowerCase()) ? '' : g[0].nombre;
+  return g.length ? `${g.length} industrias` : '';
+}
+function tambienTxt(i) { return (i.tambien || []).length ? 'también ' + i.tambien.join(' y ') : ''; }
 const IND_ICONO_OTRO = '<circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="20" r="2"/><path d="M7 7l3 3M17 7l-3 3M12 15v3"/>';
 const icono = (f, color, extra) => `<svg viewBox="0 0 24 24" fill="none" stroke="${color || 'currentColor'}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" ${extra || ''}>${IND_ICONO[f] || IND_ICONO_OTRO}</svg>`;
 // Fondo ilustrado para lo que no trae imagen (informes en PDF) y para la cabecera.
@@ -919,7 +981,7 @@ function mapaSvg() {
     const r = Math.max(...suyas.map(p => Math.hypot(p[0] - cx, p[1] - cy))) + 78;
     const c = colorFamilia(f);
     return `<circle class="halo" cx="${cx}" cy="${cy}" r="${r}" fill="${c}"/>
-      <text class="familia-txt" x="${cx}" y="${Math.max(18, cy - r + 20)}" text-anchor="middle" fill="${c}">${esc(f)}</text>`;
+      <text class="familia-txt" x="${Math.min(ancho - f.length * 6.6 - 10, Math.max(f.length * 6.6 + 10, cx))}" y="${Math.max(18, cy - r + 20)}" text-anchor="middle" fill="${c}">${esc(f)}</text>`;
   }).join('');
   const lineas = ar.map((e, k) => {
     const p = pos[e.a], q = pos[e.b]; if (!p || !q) return '';
@@ -936,7 +998,7 @@ function mapaSvg() {
       <circle class="fondo" cx="${x}" cy="${y}" r="36" stroke="${c}"/>
       <g transform="translate(${x - 17} ${y - 17})">${icono(i.familia, c, 'width="34" height="34"')}</g>
       <text x="${x}" y="${y + 58}">${esc(i.nombre)}</text>
-      <text class="sub" x="${x}" y="${y + 74}">${i.ficha ? 'Ficha' : 'Informe'} · ${n} ${n === 1 ? 'conexión' : 'conexiones'}</text></a>`;
+      <text class="sub" x="${x}" y="${y + 74}">${esc(tambienTxt(i) || cubreTxt(i) || ((i.ficha ? 'Ficha' : 'Informe') + ' · ' + n + ' ' + (n === 1 ? 'conexión' : 'conexiones')))}</text></a>`;
   }).join('');
   return `<svg viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="Mapa de industrias y sus conexiones">${halos}${lineas}${nodos}</svg>`;
 }
@@ -982,6 +1044,7 @@ function tarjetaIndustria(i) {
     <div class="imagen">${imagen}<span class="sello" style="background:${c}">${icono(i.familia, '#fff')}${esc(i.familia)}</span></div>
     <div class="cuerpo">
       <h3>${esc(i.nombre)}</h3>
+      ${(i.gics || []).length ? `<p class="ind-gics">${i.gics.length === 1 ? 'Industria' : 'Industrias'}: ${esc(i.gics.map(g => g.nombre).join(', '))}${(i.tambien || []).length ? ` · <b>${esc(tambienTxt(i))}</b>` : ''}</p>` : ''}
       <p class="tit">${esc(i.titular ? i.titular.replace(/^[^:]{0,40}:\s*/, '') : i.descripcion.slice(0, 150) + (i.descripcion.length > 150 ? '…' : ''))}</p>
       ${cifras.length ? `<div class="ind-cifras">${cifras.map(x => `<div><b>${esc(x.v).replace(/ (%|\/)/g, '\u00a0$1')}</b><span>${esc(x.l)}</span></div>`).join('')}</div>` : ''}
       <div class="pie">${conex.length ? 'Conecta con ' + conex.map(id => esc((datos.industrias.find(x => x.id === id) || {}).nombre)).join(' · ') + ' · ' : ''}${i.ficha ? 'Ficha' : 'Informe'} del ${esc(i.ficha ? i.ficha.fecha : i.informes[0].fecha)}</div>
@@ -1022,11 +1085,12 @@ function industria(i) {
       <circle cx="${cx}" cy="${cy}" r="30" fill="${c}"/><g transform="translate(${cx - 15} ${cy - 15})">${icono(i.familia, '#fff', 'width="30" height="30"')}</g></svg>`;
   })() : '';
   const relTerceros = (datos.terceros || []).filter(t => (t.industrias || []).includes(i.id));
-  return `<a class="volver" href="#/industrias">← Mapa de industrias</a>
+  return `<a class="volver" href="#/industrias">← Industrias</a>
     <div class="ind-heroe" style="background:${c}">${patron(i.familia, c, i.id)}
-      <div class="rotulo">${icono(i.familia, '#fff')}${esc(i.familia)} · ${i.ficha ? 'ficha del ' + esc(i.ficha.fecha) : 'informe del ' + esc(i.informes[0].fecha)}</div>
+      <div class="rotulo">${icono(i.familia, '#fff')}${esc(i.familia)}${cubreTxt(i) && (i.gics || []).length === 1 ? ' · ' + esc(cubreTxt(i)) : ''} · ${i.ficha ? 'ficha del ' + esc(i.ficha.fecha) : 'informe del ' + esc(i.informes[0].fecha)}</div>
       <h1>${esc(i.titular || i.nombre)}</h1>
       <p class="entradilla">${esc(i.entradilla || i.descripcion)}</p>
+      ${(i.gics || []).length ? `<p class="ind-cubre">Cubre ${i.gics.length === 1 ? 'la industria' : 'las industrias'} ${esc(i.gics.map(g => g.nombre + (g.sector !== i.familia ? ' (' + g.sector + ')' : '')).join(', '))}${(i.tambien || []).length ? '; por eso toca también ' + esc(i.tambien.join(' y ')) : ''}.</p>` : ''}
       <div class="botones">${docs}</div>
     </div>
     ${i.cifras.length ? `<div class="ind-tiles">${i.cifras.map(x => `<div style="border-top-color:${c}"><b style="color:${c}">${esc(x.v)}</b><span>${esc(x.l)}</span>${x.c ? `<small>${esc(x.c)}</small>` : ''}</div>`).join('')}</div>` : ''}
@@ -1044,18 +1108,168 @@ function industrias(id) {
   const lista = datos.industrias || [];
   const una = id && lista.find(i => i.id === id);
   if (una) return industria(una);
+  // Mapa del mercado (16/11/2026): portada de la pestaña cuando la salida lo trae (solo la privada).
+  if (datos.mapa_mercado && !id) return mapaMercado();
   const fams = familias(), ar = aristas();
   const cabecera = `<div class="rotulo">Industrias · mapa de sectores</div><h1>Cómo funciona cada sector y cómo se tocan</h1>
-    <p class="entradilla">Cada nodo es una ficha de sector; cada línea, una forma en que un sector mueve a otro. Pasa por encima para ver por qué, y entra para ver sus cifras, sus gráficos y la ficha completa.</p>`;
+    <p class="entradilla">Cada nodo es una ficha de sector; cada línea, una forma en que un sector mueve a otro. Pasa por encima para ver por qué, y entra para ver sus cifras, sus gráficos y la ficha completa.</p>
+    ${vistasIndustrias('conexiones')}`;
   if (!lista.length) return cabecera + '<p class="vacio">Todavía no hay ningún informe de sector publicado.</p>' + bloqueTerceros(datos.terceros || [], 'Lecturas de fuera');
   return cabecera + `
-    <div class="ind-resumen"><span><b>${lista.length}</b>${lista.length === 1 ? 'industria' : 'industrias'}</span><span><b>${fams.length}</b>${fams.length === 1 ? 'familia' : 'familias'}</span><span><b>${ar.length}</b>${ar.length === 1 ? 'conexión' : 'conexiones'}</span></div>
+    <div class="ind-resumen"><span><b>${lista.length}</b>${lista.length === 1 ? 'ficha' : 'fichas'}</span><span><b>${fams.length}</b>${fams.length === 1 ? 'sector' : 'sectores'}</span><span><b>${ar.length}</b>${ar.length === 1 ? 'conexión' : 'conexiones'}</span></div>
     <div class="ind-mapa" id="ind-mapa"><div class="lienzo"></div><div class="ind-pista">Pasa por encima de un sector o de una línea para ver cómo se afectan. Toca un sector para entrar.</div></div>
     <div class="ind-leyenda"><span><i></i>Relación explicada en la ficha</span><span><i class="comun"></i>Comparten empresa del terminal</span></div>
     <h2>Las fichas</h2>
-    ${fams.length > 1 ? `<div class="ind-filtros" role="group" aria-label="Filtrar por familia"><button type="button" aria-pressed="true" data-fam="">Todas</button>${fams.map(f => `<button type="button" aria-pressed="false" data-fam="${esc(f)}"><i style="background:${colorFamilia(f)}"></i>${esc(f)}</button>`).join('')}</div>` : ''}
+    ${fams.length > 1 ? `<div class="ind-filtros" role="group" aria-label="Filtrar por sector"><button type="button" aria-pressed="true" data-fam="">Todas</button>${fams.map(f => `<button type="button" aria-pressed="false" data-fam="${esc(f)}"><i style="background:${colorFamilia(f)}"></i>${esc(f)}</button>`).join('')}</div>` : ''}
     <div class="ind-rejilla">${lista.map(tarjetaIndustria).join('')}</div>
     ${bloqueTerceros(datos.terceros || [], 'Lecturas de fuera')}`;
+}
+// ---------- Mapa del mercado (Jose, 16/11/2026: «hazme un boceto», «vale, súbelo») ----------
+// Portada de Industrias en la salida privada: las 74 industrias GICS en recuadros
+// del tamaño de su peso en el S&P 500 y del color del estado de su ficha (no del
+// sector). El punto marca dónde hay empresas de cartera o watchlist. Los datos los
+// deja el generador en datos.mapa_mercado (06_INDUSTRIAS/mapa.json); la pública no
+// los lleva y abre directamente «Conexiones».
+const MM_ESTADO = {
+  'hecha': { t: 'Ficha hecha', c: '#5E8C5A', txt: '#fff' },
+  'en marcha': { t: 'Ficha en marcha', c: '#D4A142', txt: '#1B1712' },
+  'propuesta': { t: 'Ficha propuesta', c: '#8A6BB5', txt: '#fff' },
+  '': { t: 'Sin ficha', c: '#DCD5C8', txt: '#1B1712' },
+};
+const MM_MINIMO = 0.15;   // peso con el que se dibujan las industrias sin peso (o casi) en el índice
+let mmElegida = null;     // la industria abierta en el panel, para volver a ella desde una ficha
+const pctEs = (v, d = 1) => Number(v).toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }) + ' %';
+// Treemap «squarified» (Bruls, Huizing y Van Wijk): recuadros lo más cuadrados posible.
+function mmCuadrar(items, x, y, w, h) {
+  const out = [], total = items.reduce((s, i) => s + i.v, 0);
+  if (!total || w <= 0 || h <= 0) return out;
+  let resto = items.map(i => ({ i, a: i.v * w * h / total }));
+  const peor = (f, lado) => {
+    const s = f.reduce((t, r) => t + r.a, 0), mx = Math.max(...f.map(r => r.a)), mn = Math.min(...f.map(r => r.a));
+    return Math.max(lado * lado * mx / (s * s), s * s / (lado * lado * mn));
+  };
+  while (resto.length) {
+    const lado = Math.min(w, h), fila = [resto[0]];
+    let k = 1;
+    while (k < resto.length && peor([...fila, resto[k]], lado) <= peor(fila, lado)) fila.push(resto[k++]);
+    const s = fila.reduce((t, r) => t + r.a, 0);
+    if (w >= h) {
+      const fw = s / h; let yy = y;
+      fila.forEach(r => { const fh = r.a / fw; out.push({ ...r.i, x, y: yy, w: fw, h: fh }); yy += fh; });
+      x += fw; w -= fw;
+    } else {
+      const fh = s / w; let xx = x;
+      fila.forEach(r => { const fw = r.a / fh; out.push({ ...r.i, x: xx, y, w: fw, h: fh }); xx += fw; });
+      y += fh; h -= fh;
+    }
+    resto = resto.slice(k);
+  }
+  return out;
+}
+function mmFichas() { return new Map(todas().map(o => [String(o.x.ticker).toUpperCase(), o])); }
+function mapaMercado() {
+  const mm = datos.mapa_mercado, lista = mm.industrias;
+  const cuenta = e => lista.filter(i => i.estado === e).length;
+  const conEmpresas = lista.filter(i => i.empresas.length).length;
+  return `<div class="rotulo">Industrias · mapa del mercado</div><h1>Todo el mercado, industria a industria</h1>
+    <p class="entradilla">Cada recuadro es una de las ${lista.length} industrias en que se divide la bolsa según la clasificación GICS de MSCI. El tamaño es lo que pesa en el S&P 500; el color, si ya hay ficha de esa industria. Pulsa una para ver qué incluye, sus mayores empresas y las tuyas.</p>
+    ${vistasIndustrias('mapa')}
+    <div class="mm-leyenda" aria-label="Leyenda">${Object.entries(MM_ESTADO).map(([e, o]) => `<span><i style="background:${o.c}"></i>${esc(o.t)} <b>${cuenta(e)}</b></span>`).join('')}
+      <span class="punto"><i></i>Tienes empresas en ella (cartera o watchlist) <b>${conEmpresas}</b></span></div>
+    <div class="mm-cuerpo" id="mm">
+      <div><div class="mm-lienzo" role="group" aria-label="Industrias por peso en el S&P 500"></div>
+        <p class="mm-pie">Estructura: clasificación GICS de MSCI (versión de 2023). Peso: S&P 500 a ${esc(mm.fecha)} (fuente: ${esc(mm.fuente_peso.replace(/^S&P 500\s*/, '').replace(/[()]/g, '').replace(' + ', ' y '))}). Las industrias sin empresas en el índice, o casi, se dibujan con un tamaño mínimo para que se vean: su recuadro no está a escala.</p></div>
+      <aside class="mm-panel" aria-live="polite"></aside>
+    </div>`;
+}
+function vistasIndustrias(activa) {
+  if (!datos.mapa_mercado) return '';
+  return `<nav class="mm-vistas" aria-label="Vistas de Industrias">
+    <a href="#/industrias"${activa === 'mapa' ? ' aria-current="page"' : ''}>Mapa del mercado</a>
+    <a href="#/industrias/conexiones"${activa === 'conexiones' ? ' aria-current="page"' : ''}>Conexiones</a></nav>`;
+}
+function mmDibujar() {
+  const caja = document.getElementById('mm');
+  if (!caja) return;
+  const lienzo = caja.querySelector('.mm-lienzo'), mm = datos.mapa_mercado;
+  const W = lienzo.clientWidth, H = Math.round(W >= 640 ? W * 0.62 : W * 1.45);
+  lienzo.style.height = H + 'px';
+  const sectores = mm.sectores.map(s => {
+    const inds = mm.industrias.map((i, n) => ({ ...i, n, v: Math.max(i.peso, MM_MINIMO) })).filter(i => i.sector === s.nombre)
+      .sort((a, b) => b.v - a.v);
+    return { s, inds, v: inds.reduce((t, i) => t + i.v, 0) };
+  }).filter(x => x.inds.length).sort((a, b) => b.v - a.v);
+  let html = '';
+  mmCuadrar(sectores, 0, 0, W, H).forEach(sec => {
+    const cab = sec.w > 70 && sec.h > 60 ? 18 : 0, g = 2;
+    html += `<div class="mm-sector" style="left:${sec.x}px;top:${sec.y}px;width:${sec.w}px;height:${sec.h}px">${cab ? `<div class="t" title="${esc(sec.s.nombre)}">${esc(sec.s.nombre)} · ${pctEs(sec.s.peso)}</div>` : ''}</div>`;
+    mmCuadrar(sec.inds, sec.x + g, sec.y + cab + g, sec.w - 2 * g, sec.h - cab - 2 * g).forEach(r => {
+      const e = MM_ESTADO[r.estado] || MM_ESTADO[''], w = r.w - 2, h = r.h - 2;
+      const lineas = Math.max(1, Math.min(4, Math.floor((h - (w > 52 && h > 44 ? 24 : 10)) / (w > 150 && h > 80 ? 17 : 14))));
+      const nombre = w > 52 && h > 26, peso = w > 52 && h > 44;
+      html += `<button type="button" class="mm-caja${w > 150 && h > 80 ? ' grande' : ''}${r.empresas.length ? ' con-punto' : ''}${mmElegida === r.n ? ' on' : ''}" data-n="${r.n}"
+        style="left:${r.x + 1}px;top:${r.y + 1}px;width:${w}px;height:${h}px;background:${e.c};color:${e.txt}"
+        title="${esc(r.nombre)} · ${pctEs(r.peso, 2)} del S&P 500 · ${esc(e.t.toLowerCase())}${r.empresas.length ? ' · tus empresas: ' + esc(r.empresas.join(', ')) : ''}"
+        aria-label="${esc(r.nombre)}, ${pctEs(r.peso, 2)} del S&P 500, ${esc(e.t.toLowerCase())}${r.empresas.length ? ', con empresas tuyas' : ''}">
+        ${nombre ? `<span class="n" lang="es" style="-webkit-line-clamp:${lineas}">${esc(r.nombre)}</span>` : ''}${peso ? `<span class="p">${pctEs(r.peso)}</span>` : ''}${r.empresas.length ? '<i class="pt"></i>' : ''}</button>`;
+    });
+  });
+  lienzo.innerHTML = html;
+  lienzo.querySelectorAll('.mm-caja').forEach(b => b.addEventListener('click', () => {
+    mmElegida = Number(b.dataset.n);
+    lienzo.querySelectorAll('.mm-caja').forEach(x => x.classList.toggle('on', x === b));
+    mmPanel();
+    if (window.innerWidth <= 900) caja.querySelector('.mm-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+}
+function mmPanel() {
+  const panel = document.querySelector('#mm .mm-panel'), mm = datos.mapa_mercado;
+  if (!panel) return;
+  const i = mm.industrias[mmElegida];
+  if (!i) {
+    const cuenta = e => mm.industrias.filter(x => x.estado === e).length;
+    panel.innerHTML = `<div class="rotulo">Cómo se lee</div><h3>Pulsa un recuadro</h3>
+      <p>Verás de qué va la industria, cuánto pesa, sus mayores empresas, las tuyas y sus subindustrias, con el botón a la ficha si ya está hecha.</p>
+      <div class="cuenta">${Object.entries(MM_ESTADO).map(([e, o]) => `<i style="background:${o.c}"></i><span><b>${cuenta(e)}</b> · ${esc(o.t.toLowerCase())}</span>`).join('')}</div>
+      <p class="nota-gris" style="margin-top:14px">Las fichas hechas cubren el ${pctEs(mm.industrias.filter(x => x.estado === 'hecha').reduce((t, x) => t + x.peso, 0), 0)} del peso del S&P 500.</p>`;
+    return;
+  }
+  const e = MM_ESTADO[i.estado] || MM_ESTADO[''];
+  const sector = mm.sectores.find(s => s.nombre === i.sector) || { peso: 0 };
+  const orden = [...mm.industrias].sort((a, b) => b.peso - a.peso);
+  const puesto = orden.findIndex(x => x === i) + 1;
+  const pesoTxt = i.peso > 0
+    ? `<b>${pctEs(i.peso, 2)}</b> del S&P 500<p style="margin:6px 0 0">Es la ${puesto}.ª de ${orden.length} por peso${sector.peso ? `; supone el ${pctEs(100 * i.peso / sector.peso, 0)} de su sector, que pesa el ${pctEs(sector.peso)} del índice` : ''}.</p>`
+    : `<b>0 %</b> del S&P 500<p style="margin:6px 0 0">No hay ninguna empresa de esta industria en el índice. El recuadro se dibuja con un tamaño mínimo para que se vea.</p>`;
+  const fichas = mmFichas();
+  const emp = i.empresas.map(t => {
+    const o = fichas.get(t);
+    return o ? `<a href="#/empresa/${encodeURIComponent(o.x.id)}" title="${esc(o.x.nombre)}">${esc(t)}<small>${esc({ 'Watchlist': 'watchlist', 'Quality · Growth · Value': 'QGV' }[o.origen] || o.origen)}</small></a>`
+      : `<span title="Sin ficha en el terminal">${esc(t)}</span>`;
+  }).join('');
+  const abiertas = i.fichas.map(id => (datos.industrias || []).find(x => x.id === id)).filter(Boolean);
+  const botones = abiertas.length
+    ? abiertas.map(x => `<a class="boton" href="#/industrias/${encodeURIComponent(x.id)}">Abrir ficha${abiertas.length > 1 ? ': ' + esc(x.nombre) : ''}</a>`).join('')
+    : `<span class="boton" aria-disabled="true">${i.estado === 'hecha' ? 'Ficha hecha, aún no está en el terminal' : 'Sin ficha todavía'}</span>`;
+  panel.innerHTML = `<div class="rotulo">${esc(i.sector)}${i.grupo && i.grupo !== i.sector ? ' · ' + esc(i.grupo) : ''}</div>
+    <h3>${esc(i.nombre)}</h3>${i.nombre_en && i.nombre_en.toLowerCase() !== i.nombre.toLowerCase() ? `<div class="en">En inglés: ${esc(i.nombre_en)}</div>` : ''}
+    <span class="estado-ficha" style="background:${e.c}22;color:var(--texto)"><i style="background:${e.c}"></i>${esc(e.t)}</span>
+    <div class="botones">${botones}</div>
+    <div class="bloque peso"><div class="rotulo">Peso en el índice</div>${pesoTxt}</div>
+    ${i.mayores.length ? `<div class="bloque"><div class="rotulo">Las mayores del S&P 500</div>${esc(i.mayores.join(' · '))}</div>` : ''}
+    <div class="bloque"><div class="rotulo">Tus empresas</div>${emp ? `<div class="chips">${emp}</div>` : 'Ninguna, ni en cartera ni en watchlist.'}</div>
+    ${i.subindustrias.length ? `<div class="bloque"><div class="rotulo">${i.subindustrias.length === 1 ? 'Qué incluye' : `Sus ${i.subindustrias.length} subindustrias`}</div>
+      <ul class="subs">${i.subindustrias.map(s => `<li><b>${esc(s.nombre)}</b>${esc(s.definicion)}</li>`).join('')}</ul></div>` : ''}`;
+}
+function activarMapaMercado() {
+  if (!document.getElementById('mm')) return;
+  mmDibujar(); mmPanel();
+  if (!window._mmRedim) {
+    window._mmRedim = true;
+    let t, ancho = window.innerWidth;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => {
+      if (window.innerWidth !== ancho) { ancho = window.innerWidth; mmDibujar(); } }, 150); });
+  }
 }
 // La ficha HTML se descifra y se pinta dentro de la página, a toda su altura; los
 // enlaces de su índice mueven la página, no el marco.
@@ -1087,6 +1301,7 @@ async function cargarFicha(marco) {
   }
 }
 function activarIndustrias() {
+  activarMapaMercado();
   activarMapa();
   document.querySelectorAll('.ind-filtros button[data-fam]').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('.ind-filtros button[data-fam]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
