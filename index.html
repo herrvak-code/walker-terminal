@@ -453,6 +453,10 @@ a.rp-fila:hover{background:var(--papel-2)}
 .mm-panel .cuenta i{width:14px;height:14px;border-radius:3px;display:inline-block;margin-top:3px}
 .mm-pie{margin-top:12px;font:12px/1.5 var(--sans);color:var(--gris)}
 @media (max-width:900px){.mm-cuerpo{grid-template-columns:1fr} .mm-panel{position:static}}
+.sello-auto{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;margin:4px 0;border-radius:6px;background:var(--ambar-f);color:var(--ambar-t);border:1px dashed #B08A3E;font:600 11.5px var(--sans);letter-spacing:.02em}
+.parte h1{font-size:28px}.parte h3{margin-top:18px}
+.parte-visual{display:block;width:100%;min-height:600px;border:0;margin:8px 0 18px}
+.parte-control{margin:0 0 24px}.parte-control summary{cursor:pointer;font:600 14px var(--sans);color:var(--gris)}
 </style>
 </head>
 <body>
@@ -491,7 +495,7 @@ a.rp-fila:hover{background:var(--papel-2)}
 // Si GitHub Pages o el navegador sirven una versión vieja de esta página,
 // version.json (que nunca se guarda en caché) lo delata y se recarga con
 // una dirección nueva. El generador pone la huella al publicar.
-const VERSION_WEB = 'b12831d8101f';
+const VERSION_WEB = 'c7d7ade77233';
 fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
   if (v && v.web && v.web !== VERSION_WEB && !location.search.includes(v.web)) {
     location.replace(location.pathname + '?v=' + v.web + location.hash);
@@ -640,7 +644,8 @@ function foto(x) {
 
 // ---------- secciones ----------
 const MENU = [
-  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['repaso', 'Repaso', 'Qué ha pasado en cada tesis'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca'], ['industrias', 'Industrias', 'Cómo funciona cada sector']]],
+  ['Director', [['parte', 'Parte', 'Lo que toca hoy']]],
+  ['Análisis', [['vision', 'Visión', 'En qué entorno estamos'], ['estrategias', 'Estrategias', 'Dividendos, QGV y Alpha'], ['repaso', 'Repaso', 'Qué ha pasado en cada tesis'], ['watchlist', 'Watchlist', 'Lo que sigo de cerca'], ['industrias', 'Industrias', 'Cómo funciona cada sector'], ['tuberias', 'Tuberías', 'Cómo fluye el dinero']]],
   ['Mi cartera', [['cartera', 'Cartera', 'Pesos y movimientos']]],
   ['Recursos', [['metodo', 'Método', 'Cómo trabajo'], ['recursos', 'Lecturas', 'Lo que merece la pena leer']]],
   ['Biblioteca', [['biblioteca', 'Biblioteca', 'Lo que dicen otros'], ['radar', 'Radar', 'Lo entrado esta semana']]]
@@ -659,18 +664,18 @@ function pintar() {
   // Sin cartera en los datos (salida pública, 08/11/2026) no se enseña el grupo «Mi cartera».
   // El grupo Biblioteca solo existe con datos.privado (salida privada, 08/11/2026).
   // Repaso (09/11/2026): solo si alguna empresa tiene repaso en esta salida.
-  const hay = id => id === 'cartera' ? datos.cartera : (id === 'biblioteca' || id === 'radar') ? datos.privado
+  const hay = id => id === 'cartera' ? datos.cartera : id === 'parte' ? (datos.parte || []).length : (id === 'biblioteca' || id === 'radar') ? datos.privado
     : id === 'repaso' ? conRepaso().length
     // Pestañas vacías (17/11/2026, Jose: la pública solo lleva Visión, estrategias y repaso): no se enseñan.
     : id === 'metodo' ? datos.metodo : id === 'recursos' ? (datos.lecturas || []).length
-    : id === 'watchlist' ? (datos.watchlist || []).length : id === 'industrias' ? (datos.industrias || []).length : true;
+    : id === 'watchlist' ? (datos.watchlist || []).length : id === 'industrias' ? (datos.industrias || []).length : id === 'tuberias' ? (datos.tuberias_mapa || (datos.tuberias || []).length) : true;
   const menu = MENU.map(([g, items]) => [g, items.filter(([id]) => hay(id))]).filter(([, items]) => items.length);
   document.getElementById('menu').innerHTML = menu.map(([g, items]) =>
     `<div class="grupo">${esc(g)}</div>` + items.map(([id, t, s]) => {
       const activa = id === marcada;
       return `<a class="item" href="#/${id}"${activa ? ' aria-current="page"' : ''}><span>${esc(t)}</span><small>${esc(s)}</small></a>`;
     }).join('')).join('');
-  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos, repaso, industrias };
+  const vistas = { vision, estrategias, watchlist, empresa, cartera, metodo, recursos, repaso, industrias, tuberias, parte };
   if (datos.privado) Object.assign(vistas, { biblioteca, radar, otros });
   let html;
   try { html = (vistas[seccion] || vision)(partes[1], partes.slice(1)); }
@@ -683,6 +688,7 @@ function pintar() {
   const marco = document.querySelector('iframe[data-edicion]');
   if (marco) cargarEdicion(marco);
   if (seccion === 'industrias') activarIndustrias();
+  if (seccion === 'tuberias') activarTuberias();
 }
 
 function avisoLegal() {
@@ -816,7 +822,7 @@ function empresa(id) {
   if (!r) return '<h1>No encuentro esa empresa</h1>';
   const x = r.x;
   const trimestres = x.trimestres.length ? x.trimestres.map(t => `<div class="trimestre"><div class="periodo">${esc(t.periodo)}</div>
-      <div class="botones">${t.docs.map(d => boton(d.f, d.tipo + (d.fecha ? ' · ' + d.fecha : ''), 'boton--suave')).join('')}</div></div>`).join('')
+      <div class="botones">${t.docs.map(d => boton(d.f, d.tipo + (d.fecha ? ' · ' + d.fecha : ''), 'boton--suave') + (d.sin_revisar ? selloSinRevisar() : '')).join('')}</div></div>`).join('')
     : '<p class="vacio">La primera ficha previa saldrá unos días antes de los próximos resultados.</p>';
   const complementos = (x.complementos || []).map(d => `<div class="trimestre"><div class="periodo">${esc(d.fecha)}</div>
       <div class="botones"><div>${boton(d.f, d.titulo + ' (PDF)', 'boton--suave')}
@@ -1604,6 +1610,139 @@ function repasoEmpresa(id) {
     </div>
     <div class="botones" style="margin-top:16px">${boton(x.tesis[0].f, 'Tesis vigente (PDF)', 'boton--suave boton--peq')}
       <a class="boton boton--suave boton--peq" href="#/empresa/${encodeURIComponent(x.id)}">Todos los documentos</a></div></div>`;
+}
+
+// Tuberías (17/11/2026, solo privada): cómo fluye el dinero. Portada con cada
+// tubería dibujada en columnas (entra, lo gastan, se lo pagan), zona de caza y
+// panel de variables; el texto largo, plegado en su propia página.
+const TB_COLOR = {
+  tranquilo: ['var(--papel-2)', 'var(--linea-2)', 'var(--gris)', 1],
+  neutro: ['var(--blanco)', 'var(--linea-2)', 'var(--texto)', 1],
+  cuello: ['var(--verde-f)', '#3B5A2C', 'var(--verde-t)', 2.5],
+  presion: ['var(--ambar-f)', '#B08A3E', 'var(--ambar-t)', 1.2],
+  debil: ['var(--rojo-f)', '#B5654F', 'var(--rojo-t)', 1.2]
+};
+function svgTuberia(t) {
+  const CW = 156, GAP = 44, RH = 46, RG = 12, X0 = 6, Y0 = 30;
+  const pos = {};
+  let maxF = 0;
+  t.columnas.forEach((c, ci) => c.cajas.forEach(b => {
+    const h = b.hasta ?? b.fila;
+    maxF = Math.max(maxF, h);
+    const x = X0 + ci * (CW + GAP), y = Y0 + b.fila * (RH + RG);
+    pos[b.id] = { b, x, y, w: CW, h: (h - b.fila + 1) * RH + (h - b.fila) * RG };
+  }));
+  const W = X0 * 2 + t.columnas.length * CW + (t.columnas.length - 1) * GAP;
+  const H = Y0 + (maxF + 1) * (RH + RG) + 4;
+  const tit = t.columnas.map((c, ci) => c.titulo ? `<text x="${X0 + ci * (CW + GAP)}" y="16" style="font:600 11px var(--sans);letter-spacing:.08em;fill:var(--gris)">${esc(c.titulo.toUpperCase())}</text>` : '').join('');
+  const fl = (t.flechas || []).map(f => {
+    const a = pos[f.de], b = pos[f.a];
+    if (!a || !b) return '';
+    const derecha = b.x > a.x;
+    const x1 = derecha ? a.x + a.w : a.x, x2 = derecha ? b.x - 3 : b.x + b.w + 3;
+    const ya = a.y + a.h / 2, yb = b.y + b.h / 2;
+    const estilo = f.tipo === 'circular' ? 'stroke:#B5654F;stroke-dasharray:4 3' : 'stroke:var(--gris)';
+    let d;
+    if (ya > b.y + 8 && ya < b.y + b.h - 8) d = `M${x1} ${ya} H${x2}`;
+    else { const mx = derecha ? b.x - 18 : b.x + b.w + 18; d = `M${x1} ${ya} H${mx} V${yb} H${x2}`; }
+    return `<path d="${d}" fill="none" style="${estilo};stroke-width:1.2" marker-end="url(#tb-flecha)"/>`;
+  }).join('');
+  const cajas = Object.values(pos).map(({ b, x, y, w, h }) => {
+    const [f, s, tx, sw] = TB_COLOR[b.estado] || TB_COLOR.neutro;
+    const cy = y + h / 2;
+    return `<g data-caja="${esc(b.id)}" style="cursor:pointer"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" style="fill:${f};stroke:${s};stroke-width:${sw}"/>
+      <text x="${x + w / 2}" y="${cy - (b.sub ? 6 : 0)}" text-anchor="middle" dominant-baseline="central" style="font:600 12.5px var(--sans);fill:${tx}">${esc(b.nombre)}</text>
+      ${b.sub ? `<text x="${x + w / 2}" y="${cy + 10}" text-anchor="middle" dominant-baseline="central" style="font:400 11px var(--sans);fill:${tx}">${esc(b.sub)}</text>` : ''}</g>`;
+  }).join('');
+  return `<div style="overflow-x:auto"><svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;min-width:${Math.min(W, 720)}px;display:block" role="img" aria-label="${esc(t.nombre)}">
+    <defs><marker id="tb-flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--gris)" stroke-width="1.5"/></marker></defs>
+    ${tit}${fl}${cajas}</svg></div>`;
+}
+function tbChip(texto, estado) {
+  const [f, s, tx] = TB_COLOR[estado] || TB_COLOR.neutro;
+  return `<span style="display:inline-block;padding:5px 10px;border-radius:6px;background:${f};border:1px solid ${s};color:${tx};font:500 12px var(--sans)">${texto}</span>`;
+}
+function tuberias(id) {
+  const docs = datos.tuberias || [], m = datos.tuberias_mapa;
+  const doc = docs.find(x => x.id === id);
+  if (doc) return `<div class="rotulo">Tuberías</div><p><a href="#/tuberias">← Volver a las tuberías</a></p><div class="prosa">${doc.html}</div>`;
+  if (!m) return '<div class="rotulo">Tuberías</div><h1>En preparación</h1>';
+  const ley = [['tranquilo', 'en el precio o tranquilo'], ['cuello', 'cuello sin descontar'], ['presion', 'depende de otro o presión'], ['debil', 'punto débil']]
+    .map(([e, t]) => tbChip(esc(t), e)).join(' ');
+  const resumen = t => { const n = {}; t.columnas.forEach(c => c.cajas.forEach(b => { n[b.estado] = (n[b.estado] || 0) + 1; }));
+    const partes = [['cuello', 'cuello sin descontar'], ['debil', 'punto débil'], ['presion', 'presión']].filter(([e]) => n[e]).map(([e, tx]) => tbChip(`${n[e]} ${tx}`, e));
+    return (t.horizonte ? tbChip('horizonte · especulación', 'neutro') + ' ' : '') + (partes.length ? partes.join(' ') : tbChip('sin tensión', 'tranquilo')); };
+  const tubs = m.tuberias.map(t => `<details style="border-top:1px solid var(--linea);padding:12px 0"${t.columnas.some(c => c.cajas.some(b => b.estado === 'cuello')) ? ' open' : ''}>
+    <summary style="cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:10px"><span style="font:400 22px/1.2 var(--titular)">${esc(t.nombre)}</span>${resumen(t)}</summary><div style="margin-top:12px">
+    ${t.precio ? `<p class="nota-gris" style="margin:0 0 10px;font:13px var(--sans)">${esc(t.precio)}</p>` : ''}
+    ${svgTuberia(t)}
+    <div id="tb-det-${esc(t.id)}" class="nota-gris" style="min-height:22px;margin:8px 0;font:13px/1.5 var(--sans)">Pulsa una caja para ver su detalle.</div>
+    <p style="margin:14px 0 6px;font:600 11px var(--sans);letter-spacing:.08em;color:var(--gris)">CÓMO SE HA MOVIDO EL ATASCO</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">${(t.atasco || []).map(a => tbChip(`${esc(a.cuando)} · ${esc(a.que)}`, a.estado)).join('<span style="color:var(--gris)">→</span>')}</div>
+    <p style="margin:12px 0 0;font:14px/1.5 var(--sans)"><strong>Una sola apuesta.</strong> ${esc(t.apuesta || '')}</p>
+    <p style="margin:8px 0 0"><a class="boton boton--suave boton--peq" href="#/tuberias/${encodeURIComponent(t.detalle)}">Ver el detalle</a></p></div></details>`).join('');
+  const nombreCaja = idc => { for (const t of m.tuberias) for (const c of t.columnas) for (const b of c.cajas) if (b.id === idc) return `${t.nombre} · ${b.nombre}`; return idc; };
+  const filaCon = c => `<div style="margin:6px 0">${tbChip(esc(nombreCaja(c.de)) + ' ↔ ' + esc(nombreCaja(c.a)), c.tipo === 'tension' ? 'presion' : 'tranquilo')} <span style="font:13px var(--sans);color:var(--texto-2)">${esc(c.texto)}</span></div>`;
+  const conT = (m.conexiones || []).filter(c => c.tipo === 'tension'), conQ = (m.conexiones || []).filter(c => c.tipo !== 'tension');
+  const con = conT.map(filaCon).join('') + (conQ.length ? `<details style="margin-top:8px"><summary style="cursor:pointer;font:13px var(--sans);color:var(--gris)">Ver las ${conQ.length} conexiones tranquilas</summary>${conQ.map(filaCon).join('')}</details>` : '');
+  const caza = (m.caza || []).length ? m.caza.map(c => `<div style="border:2px solid #3B5A2C;background:var(--verde-f);border-radius:8px;padding:12px 14px;margin:8px 0;color:var(--verde-t);font:14px/1.5 var(--sans)"><strong>${esc(c.titulo)}</strong> · ${esc(nombreCaja(c.eslabon).split(' · ')[0])}<br>${esc(c.texto)}<br><span style="font-size:12.5px">Me equivoco si: ${esc(c.equivoco)}</span></div>`).join('')
+    : '<p class="vacio">Nada formándose sin descontar este mes.</p>';
+  const VC = { cruzado: ['var(--rojo-f)', 'var(--rojo-t)'], cerca: ['var(--ambar-f)', 'var(--ambar-t)'], tranquila: ['var(--papel-2)', 'var(--gris)'] };
+  const vars = (m.variables || []).map(v => { const [f, tx] = VC[v.estado] || VC.tranquila;
+    return `<div style="background:${f};color:${tx};border-radius:6px;padding:8px 10px;font:12px var(--sans)">${esc(v.id)} ${esc(v.nombre)}<b style="display:block;font:600 17px var(--sans);color:${tx}">${esc(v.hoy)}</b>${esc(v.nota || '')}</div>`; }).join('');
+  const otros = docs.filter(d => !m.tuberias.some(t => t.detalle === d.id)).map(d => `<a class="boton boton--suave boton--peq" href="#/tuberias/${encodeURIComponent(d.id)}">${esc(d.titulo)}</a>`).join(' ');
+  return `<div class="rotulo">Tuberías</div><h1>Cómo fluye el dinero</h1>
+    <p class="entradilla">Actualizado el ${esc(m.actualizado || '')}. Lo gris no pide atención; el color, sí.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0">${ley}</div>
+    <h2>Zona de caza</h2><p class="nota-gris" style="margin:0;font:13px var(--sans)">Cuellos formándose o activos que la bolsa aún no ha pagado.</p>${caza}
+    <h2>Las tuberías</h2><p class="nota-gris" style="margin:0 0 6px;font:13px var(--sans)">Pulsa una para abrirla. Se abren solas las que tienen un cuello sin descontar.</p>${tubs}
+    <h2>Dónde se tocan las tuberías</h2><p class="nota-gris" style="margin:0;font:13px var(--sans)">A la vista, solo las conexiones en tensión: por donde un problema de una tubería se contagia a otra.</p>${con}
+    <h2>Variables</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px">${vars}</div>
+    <p style="margin:14px 0 0">${otros}</p>`;
+}
+function activarTuberias() {
+  const m = datos.tuberias_mapa;
+  if (!m) return;
+  document.querySelectorAll('[data-caja]').forEach(g => g.addEventListener('click', () => {
+    const idc = g.dataset.caja, tid = idc.split('.')[0];
+    const t = m.tuberias.find(x => x.id === tid);
+    let b = null;
+    t && t.columnas.forEach(c => c.cajas.forEach(x => { if (x.id === idc) b = x; }));
+    const d = document.getElementById('tb-det-' + tid);
+    if (b && d) d.innerHTML = `<strong style="color:var(--texto)">${esc(b.nombre)}</strong> · ${esc(b.nota || '')}${b.empresas ? ` <em>Empresas: ${esc(b.empresas)}.</em>` : ''}${b.variable ? ` <em>Variable: ${esc(b.variable)}.</em>` : ''}`;
+  }));
+}
+
+// Sello «sin revisar por Jose» (17/11/2026): fichas previas y seguimientos que hizo
+// solo el director. Se quita con «python3 director.py --visto-bueno TICKER».
+function selloSinRevisar() {
+  return '<span class="sello-auto" title="Hecho automáticamente por el director; Jose no lo ha revisado todavía">Automático · sin revisar por Jose</span>';
+}
+
+// Parte del director (17/11/2026, solo privada): el de hoy arriba y los anteriores
+// en botones. El mismo texto se guarda en Drive (_terminal/_director/partes/).
+function parteAlto(f) {
+  try {
+    const ajusta = () => { f.style.height = f.contentDocument.documentElement.scrollHeight + 'px'; };
+    ajusta();
+    f.contentWindow.addEventListener('resize', ajusta);
+    setTimeout(ajusta, 400);  // tras cargar las fuentes
+  } catch (e) { f.style.height = '2400px'; }
+}
+function parte(fecha) {
+  const ps = datos.parte || [];
+  if (!ps.length) return '<div class="rotulo">Parte</div><h1>Todavía no hay ningún parte</h1>';
+  const p = (fecha && ps.find(x => x.fecha === fecha)) || ps[0];
+  const otros = ps.filter(x => x !== p).map(x => `<a class="boton boton--suave boton--peq" href="#/parte/${encodeURIComponent(x.fecha)}">${esc(x.fecha.split('-').reverse().join('/'))}</a>`).join(' ');
+  // Parte visual (17/11/2026): va en un iframe para que su estilo no choque con
+  // el del terminal; el alto se ajusta a su contenido. El control completo, plegado.
+  const cuerpo = p.visual
+    ? `<iframe class="parte-visual" title="Parte del director" srcdoc="${esc(p.visual)}" onload="parteAlto(this)"></iframe>
+       <details class="parte-control"><summary>Ver el control completo</summary><div class="prosa parte">${p.html}</div></details>`
+    : `<div class="prosa parte">${p.html}</div>`;
+  return `<div class="rotulo">Parte del director${p === ps[0] ? ' · el último' : ''}</div>
+    ${cuerpo}
+    ${otros ? `<h2>Partes anteriores</h2><p>${otros}</p>` : ''}`;
 }
 
 function recursos() {
